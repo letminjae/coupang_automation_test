@@ -1,4 +1,4 @@
-# 쿠팡 로그인 페이지
+# [TC-001] 쿠팡 로그인 성공 테스트 케이스
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -42,3 +42,5 @@ driver.implicitly_wait(5)
 
 myCoupang = driver.find_element(By.ID, "myCoupang")
 assert myCoupang.is_displayed(), "로그인 성공"
+print("로그인 성공 테스트 완료")
+driver.quit()
