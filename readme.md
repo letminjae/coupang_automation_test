@@ -1,3 +1,4 @@
 쿠팡 E2E 자동화 테스트
 <br/>
-Develop 브랜치 생성
+Develop 브랜치 생성 <br/>
+ㄴ feature/login 브랜치 생성
