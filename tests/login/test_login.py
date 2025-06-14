@@ -1,4 +1,4 @@
-# [TC-001] 쿠팡 로그인 성공 테스트 케이스
+# [TC-LOGIN-001] 쿠팡 로그인 성공 테스트 케이스
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By

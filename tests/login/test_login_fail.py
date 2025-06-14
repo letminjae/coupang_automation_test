@@ -1,4 +1,4 @@
-# [TC-002] 쿠팡 로그인 실패 테스트 케이스
+# [TC-LOGIN-002] 쿠팡 로그인 실패 테스트 케이스
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
