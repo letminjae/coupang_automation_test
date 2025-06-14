@@ -60,5 +60,6 @@ driver.implicitly_wait(5)
 # 봇 감지로 인해 검색 결과 페이지가 로드되지 않는다.
 result = driver.find_element(By.ID, "main-content")
 assert "ERR_HTTP2_PROTOCOL_ERROR" in result.text
+print("검색 결과 페이지가 로드되지 않았습니다. 봇 감지로 인해 정상적인 검색 결과를 확인할 수 없습니다.")
 
 driver.quit()
