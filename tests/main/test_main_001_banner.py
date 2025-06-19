@@ -3,10 +3,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import os
-from dotenv import load_dotenv
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 chrome_options = Options()
@@ -19,14 +19,15 @@ driver = webdriver.Chrome(service=service, options=chrome_options)
 driver.get("https://www.coupang.com/")
 driver.implicitly_wait(5)
 
-# 배너 이미지들
-banners = driver.find_elements(By.CSS_SELECTOR, ".main-today__bg")
-
 # 현재 보여지는 배너 찾기
 def get_visible_banner_index():
+    banners = driver.find_elements(By.CSS_SELECTOR, ".main-today__bg")
     for idx, banner in enumerate(banners):
-        if banner.is_displayed():
-            return idx
+        try:
+            if banner.is_displayed():
+                return idx
+        except Exception as e:
+            print(f"배너 {idx} 확인 중 예외 발생 : {e}")
     return -1
 
 # 슬라이드 자동 전환 확인
