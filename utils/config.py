@@ -7,7 +7,7 @@ class Config:
   IMPLICIT_WAIT_TIME = 5 # driver.implicitly_wait()에 사용
   EXPLICIT_WAIT_TIME = 10 # WebDriverWait에 사용
 
-  # WebDriver 옵션 관련
+  # User Agent 데이터 관련
   USER_AGENTS = [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
