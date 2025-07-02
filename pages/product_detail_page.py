@@ -1,0 +1,1 @@
+# Product Detail Page - Coupang 상품 상세 페이지 요소와 메서드를 정리

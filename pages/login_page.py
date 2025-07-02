@@ -1,0 +1,1 @@
+# Login Page - Coupang 로그인 페이지 요소와 메서드를 정리
