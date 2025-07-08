@@ -1,49 +1,34 @@
 # [TC-LOGIN-002] 쿠팡 로그인 실패 테스트 케이스
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium_stealth import stealth
-import os
-from dotenv import load_dotenv
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-import time
+import pytest
+from pages.main_page import MainPage
+from pages.login_page import LoginPage
+from utils.config import config_instance as config
 
-chrome_options = Options()
-chrome_options.add_argument("--start-maximized")
-chrome_options.add_experimental_option("detach", True)
+class TestLogin002WrongPW:
+    def test_fail_login_to_coupang_with_PW(self, driver):
+        """
+        메인 페이지에서 로그인 버튼 클릭 -> 로그인 페이지에서 잘못된 비밀번호 입력 -> 로그인 버튼 클릭 -> 메인페이지로 돌아가지 않음
+        """
+        # 1. 메인 페이지 객체 생성 및 기본 URL 이동
+        main_page = MainPage(driver)
+        
+        # 봇 감지 회피를 위한 초기 무빙
+        main_page.move_mouse_randomly()
 
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
+        # 2. 메인 페이지에서 로그인 버튼 클릭
+        main_page.click_login_button()
+        
+        # 3. 로그인 페이지 객체 생성
+        login_page = LoginPage(driver)
+        
+        # 4. 로그인 정보 입력 및 로그인 시도
+        id = config.COUPANG_ID
+        pw = "123456" # 잘못된 비밀번호 입력
 
-# Selenium Stealth 적용 (탐지 방지)
-stealth(driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True)
-
-driver.get("https://www.coupang.com/")
-driver.implicitly_wait(5)
-
-login_button = driver.find_element(By.CSS_SELECTOR, "a[title='로그인']")
-login_button.click()
-
-load_dotenv() # .env 파일 로드
-id_input = driver.find_element(By.ID, "login-email-input")
-password_input = driver.find_element(By.ID, "login-password-input")
-
-id_input.send_keys(os.environ.get("COUPANG_ID"))
-password_input.send_keys("123456")  # 잘못된 비밀번호 입력
-
-login_submit = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
-login_submit.click()
-
-time.sleep(3)
-
-assert driver.current_url != "https://www.coupang.com/" # 로그인 실패 시 URL이 변경되지 않아야 함
-print("로그인 실패 테스트 완료")
-driver.quit()
+        login_page.login(id, pw)
+        
+        # 5. 로그인 실패 확인
+        assert driver.current_url != "https://www.coupang.com/", "로그인이 실패하여야하나, 성공했습니다." # 로그인 실패 시 URL이 변경되지 않아야 함
+        
+        print("로그인 실패 테스트 완료")
