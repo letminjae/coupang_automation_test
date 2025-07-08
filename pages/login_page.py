@@ -27,7 +27,7 @@ class LoginPage(BasePage):
         self.enter_credentials(email, password)
         self.click_login_submit_button()
     
-    def get_error_message(self)
+    def get_error_message(self):
         """로그인 실패 시, 표시되는 에러메시지 텍스트 반환"""
         return self.get_element_text(LoginPageLocators.LOGIN_ERROR_MESSAGE)
     

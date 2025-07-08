@@ -6,7 +6,7 @@ from utils.config import Config
 
 # Main Page 전용 로케이터
 class MainPageLocators:
-    LOGIN_BUTTON = (By.CSS_SELECTOR, "a[title='로그인]")
+    LOGIN_BUTTON = (By.CSS_SELECTOR, "a[title='로그인']")
     MY_COUPANG_LINK = (By.ID, "wa-mycoupang-link")
 
 # Main Page 전용 메서드

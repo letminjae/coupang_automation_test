@@ -53,6 +53,14 @@ class BasePage:
         else:
             element.click()
         self.random_sleep(0.5, 1.5) # 클릭 후 짧은 슬립
+    
+    def move_mouse_randomly(self, min_offset=10, max_offset=100):
+        """
+        봇 감지 회피를 위해 마우스를 랜덤으로 움직임.
+        """
+        self.action.move_by_offset(random.uniform(min_offset, max_offset),
+                                    random.uniform(min_offset, max_offset)).perform()
+        self.random_sleep(0.5, 1.5) # 무빙 후 짧은 슬립
         
     def type_text(self, locator, text, human_like=True):
         """
