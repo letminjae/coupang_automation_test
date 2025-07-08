@@ -21,6 +21,10 @@ class LoginPage(BasePage):
         self.type_text(LoginPageLocators.EMAIL_INPUT, email)
         self.type_text(LoginPageLocators.PASSWORD_INPUT, password)
         self.move_mouse_randomly()
+    
+    def click_login_submit_button(self):
+        """로그인 제출 버튼을 클릭"""
+        self.click_element(LoginPageLocators.LOGIN_SUBMIT_BUTTON)
         
     def login(self, email, password):
         """로그인 절차 수행"""

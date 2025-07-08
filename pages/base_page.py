@@ -49,7 +49,7 @@ class BasePage:
         """
         element = self.find_element(locator)
         if human_like:
-            self.actions.move_to_element(element).pause(random.uniform(0.2, 0.6)).click().perform()
+            self.action.move_to_element(element).pause(random.uniform(0.2, 0.6)).click().perform()
         else:
             element.click()
         self.random_sleep(0.5, 1.5) # 클릭 후 짧은 슬립
