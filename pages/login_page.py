@@ -11,6 +11,7 @@ class LoginPageLocators:
     LOGIN_SUBMIT_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
     LOGIN_ERROR_MESSAGE = (By.CSS_SELECTOR, "div.login__error-msg")
     LOGIN_INPUT_ERROR_MESSAGE = (By.CSS_SELECTOR, ".member__message-area.member__message-area--error._memberInputMessage.login-fail-web-log-error-msg")
+    LOGIN_PASSWORD_ERROR_MESSAGE = (By.CSS_SELECTOR, ".member__message-area.member__message-area--error._loginPasswordError.login-fail-web-log-error-msg")
 
 # Login Page 전용 메서드
 class LoginPage(BasePage):
@@ -47,3 +48,11 @@ class LoginPage(BasePage):
     def is_input_error_message_displayed(self):
         """입력 필드 에러 메시지가 표시되는지 확인"""
         return self.is_element_displayed(LoginPageLocators.LOGIN_INPUT_ERROR_MESSAGE)
+    
+    def get_password_error_message(self):
+        """비밀번호 입력 필드 에러 메시지 텍스트 반환"""
+        return self.get_element_text(LoginPageLocators.LOGIN_PASSWORD_ERROR_MESSAGE)
+    
+    def is_password_error_message_displayed(self):
+        """비밀번호 입력 필드 에러 메시지가 표시되는지 확인"""
+        return self.is_element_displayed(LoginPageLocators.LOGIN_PASSWORD_ERROR_MESSAGE)
