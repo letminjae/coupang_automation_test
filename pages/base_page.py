@@ -54,6 +54,18 @@ class BasePage:
         else:
             element.click()
         self.random_sleep(0.5, 1.5) # 클릭 후 짧은 슬립
+        
+    def human_like_hover(self, locator, human_like=True):
+        """
+        특정 로케이터의 웹 요소에 인간처럼 마우스 오버
+        human_like=True : 인간처럼 마우스 오버하는 동작을 시뮬레이션
+        """
+        element = self.find_element(locator)
+        if human_like:
+            self.action.move_to_element(element).pause(random.uniform(0.4, 0.9)).perform()
+        else:
+            self.action.move_to_element(element).perform()
+        self.random_sleep(0.5, 1.5) # 오버 후 짧은 슬립
     
     def move_mouse_randomly(self, min_offset=10, max_offset=100):
         """

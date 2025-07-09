@@ -13,6 +13,8 @@ class MainPageLocators:
     MAIN_TODAY_BANNERS = (By.CSS_SELECTOR, ".main-today__bg") # 모든 배너 요소
     DISCOVERY_SECTION = (By.ID, "todayDiscoveryUnit") # 오늘의 발견 섹션
     DISCOVERY_SECTION_IMAGES = (By.CSS_SELECTOR, ".tti-image") # 오늘의 발견 이미지들
+    CATEGORY_MENU = (By.ID, "wa-category") # 상단 카테고리 메뉴
+    APPLIANCE_DIGITAL_CATEGORY = (By.LINK_TEXT, "가전디지털") # 가전디지털 카테고리 링크
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -77,3 +79,16 @@ class MainPage(BasePage):
             if img.is_displayed() and img.get_attribute("src") # src 속성도 확인하여 유효성 높임
         ]
         return visible_valid_images
+        
+    def hover_category_menu(self):
+        """
+        상단 카테고리 메뉴에 마우스 오버
+        """
+        self.human_like_hover(MainPageLocators.CATEGORY_MENU)
+        
+    def click_appliance_digital_category(self):
+        """
+        '가전디지털' 카테고리 클릭 후 이동 확인
+        """
+        self.click_element(MainPageLocators.APPLIANCE_DIGITAL_CATEGORY, human_like=True)
+        self.random_sleep(1, 2)  # 클릭 후 짧은 슬립
