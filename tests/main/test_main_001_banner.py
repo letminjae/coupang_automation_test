@@ -1,50 +1,32 @@
-# [TC-MAIN-001] 쿠팡 메인 페이지 배너 테스트
+# [TC-MAIN-001] 쿠팡 메인 페이지 배너 자동 전환 테스트
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
+import pytest
+from pages.main_page import MainPage
 
-chrome_options = Options()
-chrome_options.add_argument("--start-maximized")
-chrome_options.add_experimental_option("detach", True)
+class TestMainBanner:
+    def test_main_page_banner_auto_transition(self, driver):
+        """
+        쿠팡 메인 페이지 배너 자동 전환 기능 테스트
+        """
+        # MainPage 객체 생성 및 기본 URL로 이동
+        main_page = MainPage(driver)
+       
+        # 봇 감지 회피를 위한 초기 무빙
+        main_page.move_mouse_randomly()
 
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
+        # 1. 초기 보이는 배너 인덱스 확인
+        initial_banner_index = main_page.get_visible_banner_index()
+        print(f"초기 배너 인덱스: {initial_banner_index}")
+       
+        # 2. 배너가 전환될 때까지 기다림 (자동 전환 대기)
+        transitioned_banner_index = main_page.wait_for_banner_transition(initial_banner_index, timeout=5)
+       
+        print(f"전환 후 배너 인덱스: {transitioned_banner_index}")
 
-driver.get("https://www.coupang.com/")
-driver.implicitly_wait(5)
-
-# 슬라이더 요소 대기
-time.sleep(1)
-
-# 동적 요소 안정화 + 현재 보여지는 배너 찾기
-def wait_for_visible_banner():
-    def get_visible_banner_index():
-        banners = driver.find_elements(By.CSS_SELECTOR, ".main-today__bg")
-        for idx, banner in enumerate(banners):
-            try:
-                if banner.is_displayed():
-                    return idx
-            except Exception as E:
-                print("배너 요소 미확인.. 재시도")
-                continue
-        return -1
-    return WebDriverWait(driver, 10).until(lambda d: get_visible_banner_index() != -1 and get_visible_banner_index())
-
-# 슬라이드 자동 전환 테스트 시작
-first_index = wait_for_visible_banner()
-print("첫 배너 인덱스:", first_index)
-
-time.sleep(3)  # 슬라이드 자동 전환 대기
-
-second_index = wait_for_visible_banner()
-print("5초 후 다음 배너 인덱스:", second_index)
-
-assert first_index != second_index, "배너가 자동으로 전환되지 않았습니다."
-print("배너 자동 전환 테스트 PASS!")
-driver.quit()
+        # 3. 검증: 초기 배너 인덱스와 전환 후 배너 인덱스가 다른지 확인
+        assert initial_banner_index != -1, "초기 배너를 찾을 수 없습니다."
+        assert transitioned_banner_index != -1, "전환 후 배너를 찾을 수 없습니다."
+        assert initial_banner_index != transitioned_banner_index, \
+            f"배너가 자동으로 전환되지 않았습니다. 초기: {initial_banner_index}, 전환 후: {transitioned_banner_index}"
+       
+        print("배너 자동 전환 테스트 완료")
