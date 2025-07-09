@@ -71,6 +71,9 @@ class MainPage(BasePage):
         """
         '오늘의 발견' 섹션의 모든 이미지 요소를 반환
         """
-        discovery_section = self.wait.until(EC.presence_of_element_located(MainPageLocators.DISCOVERY_SECTION))
-        images = discovery_section.find_elements(*MainPageLocators.DISCOVERY_SECTION_IMAGES)
-        return [img for img in images if img.is_displayed() and img.get_attribute("src")]
+        images = self.find_elements(MainPageLocators.DISCOVERY_SECTION_IMAGES)
+        visible_valid_images = [
+            img for img in images 
+            if img.is_displayed() and img.get_attribute("src") # src 속성도 확인하여 유효성 높임
+        ]
+        return visible_valid_images
