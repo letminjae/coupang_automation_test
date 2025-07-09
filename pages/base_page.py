@@ -6,6 +6,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 import random
 from utils.config import Config
+from selenium.webdriver.remote.webelement import WebElement # WebElement 타입 임포트
 
 class BasePage:
     def __init__(self, driver):
@@ -77,11 +78,14 @@ class BasePage:
             element.send_keys(text)
         self.random_sleep(0.5, 1.5) # 입력 후 짧은 슬립
     
-    def scroll_to_element(self, locator):
+    def scroll_to_element(self, locator_or_element):
         """
-        특정 로케이터의 요소로 스크롤
+        주어진 로케이터(tuple) 또는 WebElement 객체로 스크롤
         """
-        element = self.find_element(locator)
+        if isinstance(locator_or_element, WebElement): # 이미 WebElement 객체인 경우
+            element = locator_or_element
+        else: # 로케이터 튜플인 경우 (By.ID, "...")
+            element = self.find_element(locator_or_element) # find_element를 사용하여 요소를 찾음
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
         self.random_sleep(0.5, 1.5)
     

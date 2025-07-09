@@ -11,6 +11,8 @@ class MainPageLocators:
     LOGIN_BUTTON = (By.CSS_SELECTOR, "a[title='로그인']")
     MY_COUPANG_LINK = (By.ID, "wa-mycoupang-link")
     MAIN_TODAY_BANNERS = (By.CSS_SELECTOR, ".main-today__bg") # 모든 배너 요소
+    DISCOVERY_SECTION = (By.ID, "todayDiscoveryUnit") # 오늘의 발견 섹션
+    DISCOVERY_SECTION_IMAGES = (By.CSS_SELECTOR, ".tti-image") # 오늘의 발견 이미지들
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -57,3 +59,18 @@ class MainPage(BasePage):
                 return current_index
             self.random_sleep(0.5, 1)
         return initial_index
+    
+    def scroll_to_discovery_section(self):
+        """
+        '오늘의 발견' 섹션으로 스크롤
+        """
+        discovery_section = self.wait.until(EC.presence_of_element_located(MainPageLocators.DISCOVERY_SECTION))
+        self.scroll_to_element(discovery_section)
+        
+    def get_discovery_images(self):
+        """
+        '오늘의 발견' 섹션의 모든 이미지 요소를 반환
+        """
+        discovery_section = self.wait.until(EC.presence_of_element_located(MainPageLocators.DISCOVERY_SECTION))
+        images = discovery_section.find_elements(*MainPageLocators.DISCOVERY_SECTION_IMAGES)
+        return [img for img in images if img.is_displayed() and img.get_attribute("src")]
