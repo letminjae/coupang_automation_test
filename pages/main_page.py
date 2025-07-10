@@ -18,6 +18,7 @@ class MainPageLocators:
     APPLIANCE_DIGITAL_CATEGORY = (By.LINK_TEXT, "가전디지털") # 가전디지털 카테고리 링크
     NOTICE_LINK_FOOTER = (By.CSS_SELECTOR, "a[href='https://mc.coupang.com/ssr/desktop/contact/notice']") # 하단 공지사항 링크
     TOP_BUTTON = (By.CLASS_NAME, "goto-top__button") # 우측 하단 Top Button
+    CATEGORY_PROMOTION_IMAGES = (By.CSS_SELECTOR, "#categoryBest_food img") # 카테고리 프로모션 이미지들
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -121,3 +122,21 @@ class MainPage(BasePage):
     def click_top_button(self):
         """Top 버튼을 클릭"""
         self.click_element(MainPageLocators.TOP_BUTTON)
+        
+    def get_promotion_image_srcs(self):
+        """
+        '카테고리 광고상품' 섹션의 모든 이미지들의 src 속성을 반환
+        """
+        self.wait.until(EC.presence_of_all_elements_located(MainPageLocators.CATEGORY_PROMOTION_IMAGES))
+        images = self.find_elements(MainPageLocators.CATEGORY_PROMOTION_IMAGES)
+        # 이미지 요소의 'src' 속성을 가져와서 반환
+        srcs = [img.get_attribute("src") for img in images if img.get_attribute("src")] # src가 없는 경우 제외
+        return srcs
+
+    def scroll_to_reveal_promotion_images(self, scroll_distance=2000, scroll_step=80, scroll_delay=0.15):
+        """
+        '카테고리 광고상품' 이미지가 로드될 때까지 페이지를 아래로 스크롤
+        """
+        print(f"이미지 로드를 위해 페이지 {scroll_distance}px 아래로 스크롤 중...")
+        self.human_like_scroll_by(distance=scroll_distance, step=scroll_step, delay=scroll_delay)
+        self.random_sleep(4, 5) # 충분히 대기하여 이미지가 로드될 시간을 줌

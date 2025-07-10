@@ -122,6 +122,17 @@ class BasePage:
                 break  # 더 이상 로딩된 컨텐츠가 없을 경우 종료
             last_height = new_height
         self.random_sleep(1, 2) # 스크롤 완료 후 마지막 대기
+        
+    def human_like_scroll_by(self, distance, step=80, delay=0.15):
+        """
+        지정된 거리만큼 인간처럼 부드럽게 스크롤.
+        """
+        current_scroll = 0
+        while current_scroll < distance:
+            self.driver.execute_script(f"window.scrollBy(0, {step});")
+            current_scroll += step
+            self.random_sleep(delay, delay + 0.05) # 미세한 랜덤성 추가
+        self.random_sleep(1, 2) # 스크롤 완료 후 대기
     
     def get_element_text(self, locator):
         """특정 로케이터의 웹 요소 텍스트를 리턴"""
