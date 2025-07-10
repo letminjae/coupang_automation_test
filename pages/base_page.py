@@ -100,6 +100,28 @@ class BasePage:
             element = self.find_element(locator_or_element) # find_element를 사용하여 요소를 찾음
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
         self.random_sleep(0.5, 1.5)
+        
+    def scroll_to_bottom(self, pause_time=None):
+        """
+        페이지의 최하단까지 스크롤하기
+        새로운 컨텐츠가 로드될 때까지 대기
+        """
+        if pause_time is None:
+            pause_time = random.uniform(1, 3) # 기본 랜덤 대기 시간
+
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
+       
+        while True:
+            # 스크롤 가장 아래로 내리기
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            self.random_sleep(pause_time, pause_time) # 지정된 시간 동안 대기
+
+            # 새로운 높이 측정
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break  # 더 이상 로딩된 컨텐츠가 없을 경우 종료
+            last_height = new_height
+        self.random_sleep(1, 2) # 스크롤 완료 후 마지막 대기
     
     def get_element_text(self, locator):
         """특정 로케이터의 웹 요소 텍스트를 리턴"""
@@ -131,3 +153,19 @@ class BasePage:
     def get_current_url(self):
         """현재 페이지의 URL을 리턴"""
         return self.driver.current_url
+    
+    def switch_to_new_window(self):
+        """새로 열린 윈도우(탭)로 전환"""
+        self.wait.until(EC.number_of_windows_to_be(2)) # 새 창이 뜰 때까지 기다림
+        original_window = self.driver.current_window_handle
+        for window_handle in self.driver.window_handles:
+            if window_handle != original_window:
+                self.driver.switch_to.window(window_handle)
+                break
+        self.random_sleep(1, 2) # 전환 후 대기
+        return original_window # 이전 윈도우 핸들을 반환하여 필요시 다시 전환 가능
+    
+    def switch_to_original_window(self, original_window_handle):
+        """원래 윈도우(탭)로 다시 전환"""
+        self.driver.switch_to.window(original_window_handle)
+        self.random_sleep(1, 2) # 전환 후 대기

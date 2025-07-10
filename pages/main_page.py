@@ -15,6 +15,7 @@ class MainPageLocators:
     DISCOVERY_SECTION_IMAGES = (By.CSS_SELECTOR, ".tti-image") # 오늘의 발견 이미지들
     CATEGORY_MENU = (By.ID, "wa-category") # 상단 카테고리 메뉴
     APPLIANCE_DIGITAL_CATEGORY = (By.LINK_TEXT, "가전디지털") # 가전디지털 카테고리 링크
+    NOTICE_LINK_FOOTER = (By.CSS_SELECTOR, "a[href='https://mc.coupang.com/ssr/desktop/contact/notice']") # 하단 공지사항 링크
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -92,3 +93,10 @@ class MainPage(BasePage):
         """
         self.click_element(MainPageLocators.APPLIANCE_DIGITAL_CATEGORY, human_like=True)
         self.random_sleep(1, 2)  # 클릭 후 짧은 슬립
+        
+    def click_footer_notice_link(self):
+        """
+        메인 페이지 최하단 푸터의 '공지사항' 링크를 클릭
+        클릭 후 새 탭/창으로 전환될 수 있으므로, 테스트에서 처리 필요.
+        """
+        self.click_element(MainPageLocators.NOTICE_LINK_FOOTER)
