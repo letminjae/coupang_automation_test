@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.config import Config
 import time
+import random
 
 # Main Page 전용 로케이터
 class MainPageLocators:
@@ -16,6 +17,7 @@ class MainPageLocators:
     CATEGORY_MENU = (By.ID, "wa-category") # 상단 카테고리 메뉴
     APPLIANCE_DIGITAL_CATEGORY = (By.LINK_TEXT, "가전디지털") # 가전디지털 카테고리 링크
     NOTICE_LINK_FOOTER = (By.CSS_SELECTOR, "a[href='https://mc.coupang.com/ssr/desktop/contact/notice']") # 하단 공지사항 링크
+    TOP_BUTTON = (By.CLASS_NAME, "goto-top__button") # 우측 하단 Top Button
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -100,3 +102,22 @@ class MainPage(BasePage):
         클릭 후 새 탭/창으로 전환될 수 있으므로, 테스트에서 처리 필요.
         """
         self.click_element(MainPageLocators.NOTICE_LINK_FOOTER)
+        
+    def get_current_scroll_y(self):
+        """현재 페이지의 Y축 스크롤 위치를 반환"""
+        return self.driver.execute_script("return window.scrollY")
+
+    def scroll_down_randomly(self, min_px=800, max_px=1200):
+        """페이지를 랜덤한 픽셀만큼 아래로 스크롤"""
+        scroll_amount = random.uniform(min_px, max_px)
+        self.driver.execute_script(f"window.scrollTo(0, {scroll_amount})")
+        self.random_sleep(3, 5) # 스크롤 후 대기
+
+    def is_top_button_displayed(self):
+        """Top 버튼이 화면에 표시되는지 확인"""
+        # Top 버튼은 스크롤이 내려가야 나타나므로, element_to_be_clickable로 명시적 대기 필요
+        return self.is_element_clickable(MainPageLocators.TOP_BUTTON, timeout=5) # 짧게 대기
+
+    def click_top_button(self):
+        """Top 버튼을 클릭"""
+        self.click_element(MainPageLocators.TOP_BUTTON)
