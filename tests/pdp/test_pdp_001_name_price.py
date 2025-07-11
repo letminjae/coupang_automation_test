@@ -1,47 +1,32 @@
-# [TC-PDP-001] 상품 상세 페이지 상품명 및 가격 정상 표시 확인 테스트코드 추가
+# [TC-PDP-001] 상풍 상세 페이지 상품명 및 가격 정상 표시 확인 테스트
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import random
+import pytest
+from pages.product_detail_page import ProductDetailPage
+from utils.config import Config
 
-user_agents = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.117 Safari/537.36"
-]
-ua = random.choice(user_agents)
+class TestProductDetailPageBasicInfo:
+    def test_product_name_and_price_display(self, driver):
+        """
+        특정 상품 상세 페이지에서 상품명과 가격이 정상적으로 표시되는지 확인
+        """
+        # 아이폰 16 프로 제품 URL
+        product_url = Config.BASE_URL + "vp/products/8335434891"
 
-chrome_options = Options()
-chrome_options.add_argument("--start-maximized")
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-chrome_options.add_experimental_option('useAutomationExtension', False)
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-chrome_options.add_argument(f"user-agent={ua}")
-chrome_options.add_argument("--log-level=3")
+        # driver 객체 생성 및 해당 제품 URL로 이동
+        pdp = ProductDetailPage(driver)
+        pdp.go_to_url(product_url)
 
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
+        # 봇 감지 회피를 위한 초기 무빙
+        pdp.move_mouse_randomly()
 
-driver.get("https://www.coupang.com/vp/products/8335434891") # 아이폰 16 프로
-driver.implicitly_wait(5)
+        # 1. 상품명 출력 확인
+        assert pdp.is_product_name_displayed(), "상품명이 화면에 표시되지 않습니다."
+        product_name_text = pdp.get_product_name()
+        print(f"상품명 정상 출력 확인 - {product_name_text}")
 
-wait = WebDriverWait(driver,10)
+        # 2. 가격 정보 출력 확인
+        assert pdp.is_product_price_displayed(), "가격이 화면에 표시되지 않습니다."
+        product_price_text = pdp.get_product_price()
+        print(f"상품 가격 정상 출력 - {product_price_text}")
 
-# 상품명 정상 출력 확인
-product_name = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,".product-title span")))
-assert product_name.is_displayed(), "상품명이 출력되지 않습니다."
-print(f"상품명 정상 출력 확인 - {product_name.text}")
-
-# 가격정보 정상 표시 확인
-price = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"price-amount")))
-assert price.is_displayed(), "가격이 출력되지 않습니다."
-print(f"상품가격 정상 출력 - {price.text}")
-
-driver.quit()
+        print("상품명 및 가격 정상 표시 테스트 완료")
