@@ -11,6 +11,7 @@ class ProductDetailPageLocators:
     PRODUCT_PRICE = (By.CLASS_NAME, "price-amount") # 가격
     MAIN_PRODUCT_IMAGE = (By.CSS_SELECTOR, "img[alt='Product image']") # 메인 상품 이미지
     THUMBNAIL_IMAGES = (By.CSS_SELECTOR, "ul.twc-w-\\[70px\\] li") # 썸네일 이미지 목록 (li 태그)
+    ROCKET_BADGE = (By.CSS_SELECTOR, "div.price-badge img") # 로켓 배송 뱃지
 
 class ProductDetailPage(BasePage):
     def __init__(self, driver):
@@ -69,3 +70,49 @@ class ProductDetailPage(BasePage):
         self.random_sleep(0.5, 1.0) # 호버 후 잠시 대기
 
         return processed_thumbnail_src
+    
+    def is_rocket_badge_displayed(self):
+        """
+        로켓배송 뱃지가 화면에 표시되는지 확인
+        """
+        try:
+            self.wait.until(EC.visibility_of_element_located(ProductDetailPageLocators.ROCKET_BADGE))
+            return True
+        except:
+            return False
+            
+    def get_rocket_badge_alt_text(self):
+        """
+        로켓배송 뱃지의 alt 텍스트를 반환 (이미지 뱃지일 경우)
+        """
+        rocket_badge_element = self.find_element(ProductDetailPageLocators.ROCKET_BADGE)
+        return rocket_badge_element.get_attribute("alt")
+
+    # [TC-PDP-005] 옵션 관련 메서드
+    _OPTION_PICKER_SELECT = (By.CSS_SELECTOR, "div.option-picker-select") # 옵션 선택 드롭다운
+    _OPTION_LIST_FIRST_CHILD = (By.CSS_SELECTOR, "ul.custom-scrollbar > li:first-child") # 옵션 목록의 첫 번째 항목
+
+    def get_all_option_pickers(self):
+        """
+        모든 옵션 선택 드롭다운 요소를 반환
+        """
+        return self.find_elements(self._OPTION_PICKER_SELECT)
+
+    def select_first_option_in_picker(self, picker_element):
+        """
+        주어진 옵션 선택 드롭다운에서 첫 번째 옵션을 선택하고,
+        선택된 옵션의 텍스트를 반환
+        """
+        self.human_like_click(picker_element)
+        
+        first_option_li = self.find_element(self._OPTION_LIST_FIRST_CHILD)
+        selected_option_text = self.get_element_text(first_option_li)
+        
+        self.human_like_click(first_option_li)
+        return selected_option_text
+
+    def get_option_picker_text(self, picker_element):
+        """
+        주어진 옵션 선택 드롭다운의 현재 선택된 옵션 텍스트를 반환
+        """
+        return picker_element.text
