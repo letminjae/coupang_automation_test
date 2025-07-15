@@ -15,6 +15,8 @@ class ProductDetailPageLocators:
     ROCKET_BADGE = (By.CSS_SELECTOR, "div.price-badge img") # 로켓 배송 뱃지
     REVIEW_LINK = (By.XPATH, "//a[contains(text(), '상품평')]") # '상품평' 텍스트를 포함하는 링크
     REVIEW_HEADER = (By.CSS_SELECTOR, "div.review-header") # 리뷰 섹션의 헤더
+    OPTION_PICKER_SELECT = (By.CSS_SELECTOR, "div.option-picker-select") # 옵션 선택 드롭다운
+    OPTION_LIST_FIRST_CHILD = (By.CSS_SELECTOR, "ul.custom-scrollbar > li:first-child") # 옵션 목록의 첫 번째 항목
 
 class ProductDetailPage(BasePage):
     def __init__(self, driver):
@@ -154,3 +156,24 @@ class ProductDetailPage(BasePage):
             return True
         except TimeoutException:
             return False
+        
+    def get_all_option_pickers(self):
+        """모든 옵션 선택 드롭다운 요소를 반환"""
+        return self.find_elements(ProductDetailPageLocators.OPTION_PICKER_SELECT)
+
+    def select_first_option_in_picker(self, picker_element):
+        """
+        주어진 옵션 피커 드롭다운을 클릭하고,
+        첫 번째 옵션을 선택한 후, 선택된 옵션의 텍스트를 반환
+        """
+        self.human_like_click(picker_element) # BasePage의 human_like_click 사용
+        
+        first_option_li = self.wait.until(EC.visibility_of_element_located(ProductDetailPageLocators.OPTION_LIST_FIRST_CHILD))
+        selected_option_text = self.get_element_text(first_option_li) # 텍스트 미리 저장
+        
+        self.human_like_click(first_option_li)
+        return selected_option_text
+
+    def get_option_picker_text(self, picker_element):
+        """옵션 피커 드롭다운에 현재 표시된 텍스트를 반환"""
+        return picker_element.text
