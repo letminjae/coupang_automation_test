@@ -4,6 +4,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.config import Config
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # PDP 전용 로케이터
 class ProductDetailPageLocators:
@@ -12,6 +13,8 @@ class ProductDetailPageLocators:
     MAIN_PRODUCT_IMAGE = (By.CSS_SELECTOR, "img[alt='Product image']") # 메인 상품 이미지
     THUMBNAIL_IMAGES = (By.CSS_SELECTOR, "ul.twc-w-\\[70px\\] li") # 썸네일 이미지 목록 (li 태그)
     ROCKET_BADGE = (By.CSS_SELECTOR, "div.price-badge img") # 로켓 배송 뱃지
+    REVIEW_LINK = (By.XPATH, "//a[contains(text(), '상품평')]") # '상품평' 텍스트를 포함하는 링크
+    REVIEW_HEADER = (By.CSS_SELECTOR, "div.review-header") # 리뷰 섹션의 헤더
 
 class ProductDetailPage(BasePage):
     def __init__(self, driver):
@@ -116,3 +119,38 @@ class ProductDetailPage(BasePage):
         주어진 옵션 선택 드롭다운의 현재 선택된 옵션 텍스트를 반환
         """
         return picker_element.text
+    
+    def find_and_click_review_link(self, max_scroll_attempts=5):
+        """
+        '상품평' 링크를 찾을 때까지 페이지를 스크롤하고 클릭
+        """
+        attempt = 0 # 스크롤 시도 횟수
+        while attempt < max_scroll_attempts:
+            try:
+                # 리뷰 링크가 클릭 가능한 상태가 될 때까지 대기
+                review_link = self.wait.until(EC.element_to_be_clickable(ProductDetailPageLocators.REVIEW_LINK))
+                print("리뷰 링크를 찾았습니다. 클릭합니다.")
+                self.human_like_click(review_link)
+                return True # 클릭 성공
+            except TimeoutException:
+                # 요소를 못 찾았을 경우, 스크롤을 시도
+                print(f"리뷰 링크를 찾지 못했습니다 (시도 {attempt+1}/{max_scroll_attempts}). 페이지를 스크롤합니다.")
+                # BasePage의 scroll_to_bottom을 사용하여 조금씩 스크롤
+                # 전체를 다 내리지 않고 필요한 만큼만 내릴 수 있도록 조정 가능
+                self.driver.execute_script("window.scrollBy(0, window.innerHeight);") # 한 화면 높이만큼 스크롤
+                self.random_sleep(1, 2) # 스크롤 후 대기
+                attempt += 1
+                
+        print("최대 스크롤 시도 횟수에 도달했지만 리뷰 링크를 찾지 못했습니다.")
+        return False # 클릭 실패
+
+    def is_review_header_displayed(self):
+        """
+        리뷰 섹션의 헤더가 화면에 표시되는지 확인
+        """
+        try:
+            # 리뷰 헤더가 가시적인 상태가 될 때까지 기다립니다.
+            self.wait.until(EC.visibility_of_element_located(ProductDetailPageLocators.REVIEW_HEADER))
+            return True
+        except TimeoutException:
+            return False
