@@ -19,6 +19,9 @@ class MainPageLocators:
     NOTICE_LINK_FOOTER = (By.CSS_SELECTOR, "a[href='https://mc.coupang.com/ssr/desktop/contact/notice']") # 하단 공지사항 링크
     TOP_BUTTON = (By.CLASS_NAME, "goto-top__button") # 우측 하단 Top Button
     CATEGORY_PROMOTION_IMAGES = (By.CSS_SELECTOR, "#categoryBest_food img") # 카테고리 프로모션 이미지들
+    SEARCH_INPUT = (By.CSS_SELECTOR, "input[name='q']") # 검색창
+    SEARCH_BUTTON = (By.CSS_SELECTOR, "form[id='wa-search-form'] button[title='검색']") # 검색버튼
+    SEARCH_RESULT = (By.ID, "main-content") # 검색 결과 창 콘텐츠
 
 # Main Page 전용 메서드
 class MainPage(BasePage):
@@ -140,3 +143,15 @@ class MainPage(BasePage):
         print(f"이미지 로드를 위해 페이지 {scroll_distance}px 아래로 스크롤 중...")
         self.human_like_scroll_by(distance=scroll_distance, step=scroll_step, delay=scroll_delay)
         self.random_sleep(4, 5) # 충분히 대기하여 이미지가 로드될 시간을 줌
+        
+    def search_product(self, product_name, human_like=True):
+        """
+        메인 페이지에서 상품을 검색
+        :param product_name: 검색할 상품 이름
+        :param human_like: human_like 방식으로 입력할지 여부
+        """
+        # 검색창에 텍스트를 입력
+        self.type_text(MainPageLocators.SEARCH_INPUT, product_name, human_like=human_like)
+        self.random_sleep(1, 2)  # 입력 후 짧은 슬립
+        # 검색 버튼 클릭
+        self.click_element(MainPageLocators.SEARCH_BUTTON, human_like=human_like)
