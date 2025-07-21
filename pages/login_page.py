@@ -3,6 +3,8 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from utils.config import Config
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 # Login Page 전용 로케이터
 class LoginPageLocators:
@@ -12,6 +14,7 @@ class LoginPageLocators:
     LOGIN_ERROR_MESSAGE = (By.CSS_SELECTOR, "div.login__error-msg")
     LOGIN_INPUT_ERROR_MESSAGE = (By.CSS_SELECTOR, ".member__message-area.member__message-area--error._memberInputMessage.login-fail-web-log-error-msg")
     LOGIN_PASSWORD_ERROR_MESSAGE = (By.CSS_SELECTOR, ".member__message-area.member__message-area--error._loginPasswordError.login-fail-web-log-error-msg")
+    LOGIN_PASSWORD_COMMON_ERROR_MESSAGE = (By.CSS_SELECTOR, ".member__message-area.member__message-area--error._loginCommonError.login-fail-web-log-error-msg")
 
 # Login Page 전용 메서드
 class LoginPage(BasePage):
@@ -33,26 +36,40 @@ class LoginPage(BasePage):
         self.enter_credentials(email, password)
         self.click_login_submit_button()
     
-    def get_error_message(self):
-        """로그인 실패 시, 표시되는 에러메시지 텍스트 반환"""
-        return self.get_element_text(LoginPageLocators.LOGIN_ERROR_MESSAGE)
-    
-    def is_error_message_displayed(self):
-        """로그인 에러 메시지가 표시되는지 확인"""
-        return self.is_element_displayed(LoginPageLocators.LOGIN_ERROR_MESSAGE)
-    
-    def get_input_error_message(self):
-        """입력 필드 에러 메시지 텍스트 반환"""
-        return self.get_element_text(LoginPageLocators.LOGIN_INPUT_ERROR_MESSAGE)
-    
-    def is_input_error_message_displayed(self):
-        """입력 필드 에러 메시지가 표시되는지 확인"""
-        return self.is_element_displayed(LoginPageLocators.LOGIN_INPUT_ERROR_MESSAGE)
-    
-    def get_password_error_message(self):
-        """비밀번호 입력 필드 에러 메시지 텍스트 반환"""
-        return self.get_element_text(LoginPageLocators.LOGIN_PASSWORD_ERROR_MESSAGE)
-    
-    def is_password_error_message_displayed(self):
-        """비밀번호 입력 필드 에러 메시지가 표시되는지 확인"""
-        return self.is_element_displayed(LoginPageLocators.LOGIN_PASSWORD_ERROR_MESSAGE)
+    def get_error_message(self, timeout=5):
+        """
+        로그인 실패 시 표시되는 다양한 유형의 에러 메시지 중 하나를 반환
+        정의된 여러 에러 메시지 로케이터를 순회하며 가장 먼저 표시되는 메시지를 반환
+        """
+        # 메시지를 확인할 로케이터들의 리스트
+        error_locators_to_check = [
+            LoginPageLocators.LOGIN_COMMON_ERROR_MESSAGE,
+            LoginPageLocators.LOGIN_INPUT_FIELD_ERROR_MESSAGE,
+            LoginPageLocators.LOGIN_PASSWORD_SPECIFIC_ERROR_MESSAGE,
+            LoginPageLocators.LOGIN_PASSWORD_COMMON_ERROR_MESSAGE,
+        ]
+
+        for locator in error_locators_to_check:
+            try:
+                # 각 로케이터에 대해 요소가 보일 때까지 짧게 대기
+                error_element = self.wait.until(EC.visibility_of_element_located(locator))
+                if error_element.is_displayed():
+                    return error_element.text
+            except TimeoutException:
+                # 해당 로케이터로 메시지를 찾지 못하면 다음 로케이터 시도
+                continue
+            except Exception as e:
+                # 다른 예외 발생 시 로깅 (선택 사항)
+                print(f"예외발생 에러 체킹 {locator}: {e}")
+                continue
+        
+        # 모든 로케이터를 시도했지만 메시지를 찾지 못한 경우
+        print("로그인 에러 메시지를 찾지 못했습니다.")
+        return None
+
+    def is_error_message_displayed(self, timeout=5):
+        """
+        로그인 실패 시 에러 메시지 중 하나라도 표시되는지 확인
+        """
+        # get_error_message() 내부 로직을 재활용하여 메시지가 존재하면 True 반환
+        return bool(self.get_error_message(timeout=timeout))

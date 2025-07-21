@@ -51,3 +51,32 @@ class TestLoginScenarios:
         assert main_page.get_my_coupang_link_text() == "마이쿠팡", "'마이쿠팡' 링크 텍스트가 올바르지 않습니다."
         
         print("로그인 성공 테스트 완료: 마이쿠팡 링크 확인")
+        
+    # 잘못된 비밀번호, 잘못된 ID, 비밀번호 미입력 등 다양한 로그인 실패 시나리오를 테스트 (parametrize 사용)
+    @pytest.mark.parametrize("email, password, expected_error_message", [
+        (config.COUPANG_ID, "wrong123456", "이메일 또는 비밀번호를 다시 확인하세요."), # TC-LOGIN-002: 잘못된 비밀번호
+        ("", config.COUPANG_PW, "아이디(이메일)를 입력해주세요."),  # TC-LOGIN-003: 이메일 미입력
+        (config.COUPANG_ID, "", "비밀번호를 입력해주세요."),  # TC-LOGIN-004: 비밀번호 미입력
+        ("zzzz.1234", config.COUPANG_PW, "아이디는 이메일 형식으로 입력해주세요."), # TC-LOGIN-005: 잘못된 이메일 형식
+    ])
+    def test_invalid_login_scenarios(self, driver, email, password, expected_error_message):
+        """
+        [TC-LOGIN-002 ~ TC-LOGIN-005] 쿠팡 로그인 실패 테스트 케이스
+        잘못된 비밀번호, 이메일 미입력, 비밀번호 미입력, 잘못된 이메일 형식 등 다양한 시나리오를 테스트
+        """
+        
+        # 로그인 페이지 객체 생성
+        login_page = LoginPage(driver)
+        
+        # 로그인 시도
+        login_page.login(email, password)
+        
+        # 오류 메시지 확인
+        assert login_page.is_error_message_displayed(), "오류 메시지가 표시되지 않습니다."
+        
+        # 실제 오류 메시지와 예상 메시지 비교
+        actual_error_message = login_page.get_error_message()
+        assert actual_error_message == expected_error_message, f"예상 오류 메시지: '{
+            expected_error_message}', 실제 오류 메시지: '{actual_error_message}'"
+        
+        print(f"로그인 실패 테스트 완료: {actual_error_message} 오류 메시지 확인")
