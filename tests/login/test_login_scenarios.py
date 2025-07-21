@@ -31,6 +31,11 @@ class TestLoginScenarios:
         
         # 각 테스트 후 필요한 정리 작업이 있다면 여기에 추가 (예: 로그아웃, 쿠키 삭제 등)
         # 현재는 driver.quit()은 conftest.py의 session scope fixture에서 처리
+        print("--- 로그인 테스트 완료 후 쿠키 삭제 ---")
+        # 현재 브라우저의 모든 쿠키를 삭제하여 로그인 상태 등 세션 정보를 초기화
+        driver.delete_all_cookies()
+        print("브라우저 쿠키 삭제 완료.")
+
         
     def test_successful_login(self, driver):
         """
