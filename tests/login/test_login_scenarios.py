@@ -69,6 +69,7 @@ class TestLoginScenarios:
         [TC-LOGIN-002 ~ TC-LOGIN-005] 쿠팡 로그인 실패 테스트 케이스
         잘못된 비밀번호, 이메일 미입력, 비밀번호 미입력, 잘못된 이메일 형식 등 다양한 시나리오를 테스트
         """
+        print("LOGIN 002 ~ 005 테스트: 잘못된 정보로 로그인 시도")
         
         # 로그인 페이지 객체 생성
         login_page = LoginPage(driver)
