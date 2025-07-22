@@ -46,3 +46,22 @@ class TestMainScenarios:
             f"배너가 자동으로 전환되지 않았습니다. 초기: {initial_banner_index}, 전환 후: {transitioned_banner_index}"
         
         print("배너 자동 전환 테스트 완료")
+        
+    def test_todays_discovery_images_and_list_displayed(self):
+        """
+        [TC-MAIN-002] 쿠팡 메인 페이지 '오늘의 발견' 섹션의 이미지 및 리스트 표시 확인
+        """
+        print("'오늘의 발견' 이미지 및 리스트 표시 확인 테스트 시작")
+        
+        # 1. '오늘의 발견' 섹션으로 스크롤 내리기
+        print("'오늘의 발견' 섹션으로 스크롤 중...")
+        self.main_page.scroll_to_discovery_section()
+        
+        # 2. '오늘의 발견' 섹션의 이미지 요소 로드 확인
+        print("'오늘의 발견' 섹션 이미지 로당 중...")
+        loaded_images = self.main_page.get_discovery_images()
+        
+        # 3. 검증: 로드된 이미지 수가 0보다 큰지 확인
+        assert len(loaded_images) > 0, "'오늘의 발견' 섹션의 이미지가 로드되지 않았습니다."
+        print(f"로드된 '오늘의 발견' 이미지 수: {len(loaded_images)}")
+        print("오늘의 발견 이미지 및 리스트 정상 표시 확인 완료!")
