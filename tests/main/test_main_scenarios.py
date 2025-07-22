@@ -58,10 +58,24 @@ class TestMainScenarios:
         self.main_page.scroll_to_discovery_section()
         
         # 2. '오늘의 발견' 섹션의 이미지 요소 로드 확인
-        print("'오늘의 발견' 섹션 이미지 로당 중...")
+        print("'오늘의 발견' 섹션 이미지 로딩 중...")
         loaded_images = self.main_page.get_discovery_images()
         
         # 3. 검증: 로드된 이미지 수가 0보다 큰지 확인
         assert len(loaded_images) > 0, "'오늘의 발견' 섹션의 이미지가 로드되지 않았습니다."
         print(f"로드된 '오늘의 발견' 이미지 수: {len(loaded_images)}")
         print("오늘의 발견 이미지 및 리스트 정상 표시 확인 완료!")
+        
+    def test_category_navigation(self):
+        """
+        [TC-MAIN-003] 쿠팡 메인 페이지 카테고리 메뉴에서 '가전디지털' 카테고리로 이동하는 동작 확인
+        """
+        print("'가전디지털' 카테고리 이동 테스트 시작")
+        
+        # 1. '가전디지털' 카테고리로 Hover 후 클릭
+        self.main_page.hover_category_menu()
+        self.main_page.click_appliance_digital_category()
+
+        # 2. 가전디지털 페이지로 이동했는지 확인
+        assert "가전디지털" in self.main_page.driver.title, "가전디지털 페이지 이동 실패"
+        print("가전디지털 페이지 이동 성공")
