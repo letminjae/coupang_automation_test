@@ -29,7 +29,7 @@ class TestMainScenarios:
         [TC-MAIN-001] 쿠팡 메인 페이지 배너 테스트
         배너가 정상적으로 표시되고, 올바르게 전환되는지 확인
         """
-        print("\n--- 배너 캐러셀 테스트 시작 ---")
+        print("\n--- [TC-MAIN-001] 배너 캐러셀 테스트 시작 ---")
         # 1. 초기 보이는 배너 인덱스 확인
         initial_banner_index = self.main_page.get_visible_banner_index()
         print(f"초기 배너 인덱스: {initial_banner_index}")
@@ -51,7 +51,7 @@ class TestMainScenarios:
         """
         [TC-MAIN-002] 쿠팡 메인 페이지 '오늘의 발견' 섹션의 이미지 및 리스트 표시 확인
         """
-        print("'오늘의 발견' 이미지 및 리스트 표시 확인 테스트 시작")
+        print("\n--- [TC-MAIN-002] '오늘의 발견' 이미지 및 리스트 표시 확인 테스트 시작")
         
         # 1. '오늘의 발견' 섹션으로 스크롤 내리기
         print("'오늘의 발견' 섹션으로 스크롤 중...")
@@ -70,7 +70,7 @@ class TestMainScenarios:
         """
         [TC-MAIN-003] 쿠팡 메인 페이지 카테고리 메뉴에서 '가전디지털' 카테고리로 이동하는 동작 확인
         """
-        print("'가전디지털' 카테고리 이동 테스트 시작")
+        print("\n--- [TC-MAIN-003] '가전디지털' 카테고리 이동 테스트 시작")
         
         # 1. '가전디지털' 카테고리로 Hover 후 클릭
         self.main_page.hover_category_menu()
@@ -84,7 +84,7 @@ class TestMainScenarios:
         """
         [TC-MAIN-004] 쿠팡 메인 페이지 최하단 푸터의 '공지사항' 링크 클릭 및 페이지 이동 확인
         """
-        print("'공지사항' 링크 클릭 및 페이지 이동 테스트 시작")
+        print("\n--- [TC-MAIN-004] '공지사항' 링크 클릭 및 페이지 이동 테스트 시작")
         
         # 1. 페이지 최하단으로 스크롤
         print("페이지 최하단으로 스크롤 중...")
@@ -114,7 +114,7 @@ class TestMainScenarios:
         [TC-MAIN-005] 쿠팡 메인 페이지의 'Top' 버튼이 올바르게 동작하여
         페이지 최상단으로 이동하는지 확인
         """
-        print("Top 버튼 동작 테스트 시작")
+        print("\n--- [TC-MAIN-005] Top 버튼 동작 테스트 시작")
         
         # 1. 페이지를 랜덤하게 아래로 스크롤하여 Top 버튼 표시되게 하기
         self.main_page.scroll_down_randomly(min_px=800, max_px=1200) # 랜덤 스크롤
@@ -140,7 +140,7 @@ class TestMainScenarios:
         [TC-MAIN-006] 쿠팡 메인 페이지 '카테고리 광고상품' 섹션의 이미지가
         스크롤에 의해 레이지 로딩되는지 확인
         """
-        print("'카테고리 광고상품' Lazy Loading 테스트 시작")
+        print("\n--- [TC-MAIN-006] '카테고리 광고상품' Lazy Loading 테스트 시작")
         
         # 1. 스크롤 이전에 이미지 src 속성을 먼저 확인
         srcs_before_scroll = self.main_page.get_promotion_image_srcs()
@@ -163,7 +163,7 @@ class TestMainScenarios:
         [TC-MAIN-007] 메인 페이지에서 상품 검색 기능 확인
         특정 상품을 메인페이지에서 검색하여 결과 확인
         """
-        print("상품 검색 기능 테스트 시작")
+        print("\n--- [TC-MAIN-007] 상품 검색 기능 테스트 시작")
         
         # 1. 검색창에 텍스트를 입력 후, 검색 버튼 클릭 (예: "노트북")
         self.main_page.search_product("노트북")
