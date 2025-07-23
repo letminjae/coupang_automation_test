@@ -134,3 +134,26 @@ class TestMainScenarios:
             f"Top 버튼 동작 실패: 페이지가 최상단으로 이동하지 않았습니다. 현재 스크롤 Y: {current_scroll_y}"
             
         print("Top button 정상 작동 확인 완료")
+        
+    def test_promotion_lazy_loading(self):
+        """
+        [TC-MAIN-006] 쿠팡 메인 페이지 '카테고리 광고상품' 섹션의 이미지가
+        스크롤에 의해 레이지 로딩되는지 확인
+        """
+        print("'카테고리 광고상품' Lazy Loading 테스트 시작")
+        
+        # 1. 스크롤 이전에 이미지 src 속성을 먼저 확인
+        srcs_before_scroll = self.main_page.get_promotion_image_srcs()
+        print(f"스크롤 이전 src 속성 (처음 3개): {srcs_before_scroll[:3]}") # 사실 상 렌더링전이라 srcs_before_scroll는 빈 리스트일 가능성이 높음
+        
+        # 2. '카테고리 광고상품' 이미지가 나타날 때까지 아래로 스크롤
+        self.main_page.scroll_to_reveal_promotion_images(scroll_distance=2000, scroll_step=80, scroll_delay=0.15)
+        
+        # 3. 스크롤 이후 다시 src 속성 확인 (lazy loading 여부)
+        srcs_after_scroll = self.main_page.get_promotion_image_srcs()
+        print(f"스크롤 이후 src 속성 (처음 3개): {srcs_after_scroll[:3]}")
+        
+        # 4. 검증: 스크롤 이후 이미지 src 목록의 길이가 스크롤 이전보다 길어졌는지 확인
+        assert len(srcs_after_scroll) > len(srcs_before_scroll), "Lazy loading이 정상 작동하지 않았습니다."
+        
+        print("Lazy loading 정상 작동 확인 완료")
