@@ -161,7 +161,7 @@ class TestMainScenarios:
     def test_search_product_display(self):
         """
         [TC-MAIN-007] 메인 페이지에서 상품 검색 기능 확인
-        특정 상품을 메인페이지에서 검색하여 결과 확인
+        상품 검색 시, 봇 감지로 인해 검색 결과 페이지가 로드되지 않는지 확인
         """
         print("\n--- [TC-MAIN-007] 상품 검색 기능 테스트 시작")
         
