@@ -109,3 +109,30 @@ class TestPDPScenarios:
         assert self.pdp_page.is_review_header_displayed(), "상품평 영역의 헤더가 표시되지 않습니다. 리뷰 로딩 실패."
         
         print("상품평 화면 표시 성공 확인 완료")
+        
+    def test_product_option_application(self):
+        """
+        [TC-PDP-005] 상품 상세 페이지에서 옵션을 선택하고
+        선택된 옵션의 텍스트가 올바르게 반영되는지 확인
+        """
+        print("\n[TC-PDP-005] 상품 옵션 적용 확인 테스트 시작")
+        
+        # 1. 모든 옵션 피커 드롭다운 가져오기
+        option_pickers = self.pdp_page.get_all_option_pickers()
+        print(f"총 {len(option_pickers)}개의 옵션 드롭다운을 찾았습니다.")
+        
+        # 2. 각 옵션 피커에 대해 첫 번째 옵션 선택 및 확인
+        for index, picker_element in enumerate(option_pickers):
+            print(f"상품 {index+1}번 옵션 변경 테스트 진행 중...")
+            
+            # 옵션 선택 (첫 번째 옵션 클릭)
+            selected_option_text = self.pdp_page.select_first_option_in_picker(picker_element)
+            
+            # 첫 번째 옵션의 내용이 상품에 반영되는지 확인
+            current_picker_text = self.pdp_page.get_option_picker_text(picker_element)
+            
+            assert selected_option_text in current_picker_text, \
+                f"상품 {index+1}번 옵션 반영 실패: 선택된 옵션 '{selected_option_text}', 현재 피커 텍스트 '{current_picker_text}'"
+            print(f"상품 {index+1}번 옵션 변경 테스트 성공: '{selected_option_text}' 확인됨.")
+
+        print("모든 상품 옵션 적용 확인 테스트 완료")
