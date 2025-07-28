@@ -91,3 +91,21 @@ class TestPDPScenarios:
         
         # 만약 로켓배송이 아닌 상품도 테스트해야 한다면, 별도의 테스트 케이스 또는 parametrize를 사용 필요
         print("로켓배송 정보 영역 확인 테스트 완료")
+        
+    def test_review_section_display(self):
+        """
+        [TC-PDP-004] 상품 상세 페이지에서 '상품평' 링크를 찾아 클릭하고,
+        리뷰 영역이 정상적으로 표시되는지 확인
+        """
+        print("\n[TC-PDP-004] 리뷰 영역 확인 테스트 시작")
+        
+        # 1. '상품평' 링크를 찾고 클릭 (필요시 스크롤 수행)
+        link_clicked = self.pdp_page.find_and_click_review_link()
+        
+        assert link_clicked, "상품평 링크를 찾거나 클릭하는 데 실패했습니다."
+        print("상품평 링크 클릭 성공")
+
+        # 2. 리뷰 헤더가 표시되는지 확인 (리뷰 영역 로딩 확인)
+        assert self.pdp_page.is_review_header_displayed(), "상품평 영역의 헤더가 표시되지 않습니다. 리뷰 로딩 실패."
+        
+        print("상품평 화면 표시 성공 확인 완료")
