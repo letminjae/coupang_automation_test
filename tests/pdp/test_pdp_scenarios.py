@@ -28,3 +28,21 @@ class TestPDPScenarios:
         # 각 테스트 후 필요한 정리 작업이 있다면 여기에 추가
         driver.delete_all_cookies() # 테스트 후 쿠키 삭제로 상태 초기화
         print("브라우저 쿠키 삭제 완료.")
+        
+    def test_product_name_and_price_display(self):
+        """
+        [TC-PDP-001] 특정 상품 상세 페이지에서 상품명과 가격이 정상적으로 표시되는지 확인
+        """
+        print("\n[TC-PDP-001] 상품명 및 가격 정상 표시 확인 테스트 시작")
+        
+        # 1. 상품명 정상 출력 확인
+        assert self.pdp_page.is_product_name_displayed(), "상품명이 화면에 표시되지 않습니다."
+        product_name_text = self.pdp_page.get_product_name()
+        print(f"상품명 정상 출력 확인 - {product_name_text}")
+
+        # 2. 가격정보 정상 표시 확인
+        assert self.pdp_page.is_product_price_displayed(), "가격이 화면에 표시되지 않습니다."
+        product_price_text = self.pdp_page.get_product_price()
+        print(f"상품가격 정상 출력 - {product_price_text}")
+        
+        print("상품명 및 가격 정상 표시 테스트 완료")
