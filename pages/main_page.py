@@ -1,7 +1,6 @@
 # Main page - Coupang 메인 페이지 요소와 메서드를 정리, 검색 기능 포함
 
 from pages.base_page import BasePage
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from utils.config import Config
 from utils.locators import MainPageLocators

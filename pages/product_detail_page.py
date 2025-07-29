@@ -3,20 +3,8 @@
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from utils.config import Config
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
-# PDP 전용 로케이터
-class ProductDetailPageLocators:
-    PRODUCT_TITLE = (By.CSS_SELECTOR, ".product-title span") # 상품명
-    PRODUCT_PRICE = (By.CLASS_NAME, "price-amount") # 가격
-    MAIN_PRODUCT_IMAGE = (By.CSS_SELECTOR, "img[alt='Product image']") # 메인 상품 이미지
-    THUMBNAIL_IMAGES = (By.CSS_SELECTOR, "ul.twc-w-\\[70px\\] li") # 썸네일 이미지 목록 (li 태그)
-    ROCKET_BADGE = (By.CSS_SELECTOR, "div.price-badge img") # 로켓 배송 뱃지
-    REVIEW_LINK = (By.XPATH, "//a[contains(text(), '상품평')]") # '상품평' 텍스트를 포함하는 링크
-    REVIEW_HEADER = (By.CSS_SELECTOR, "div.review-header") # 리뷰 섹션의 헤더
-    OPTION_PICKER_SELECT = (By.CSS_SELECTOR, "div.option-picker-select") # 옵션 선택 드롭다운
-    OPTION_LIST_FIRST_CHILD = (By.CSS_SELECTOR, "ul.custom-scrollbar > li:first-child") # 옵션 목록의 첫 번째 항목
+from utils.locators import ProductDetailPageLocators
+from selenium.common.exceptions import TimeoutException
 
 class ProductDetailPage(BasePage):
     def __init__(self, driver):

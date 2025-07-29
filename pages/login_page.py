@@ -1,8 +1,6 @@
 # Login Page - Coupang 로그인 페이지 요소와 메서드를 정리
 
 from pages.base_page import BasePage
-from selenium.webdriver.common.by import By
-from utils.config import Config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from utils.locators import LoginPageLocators
