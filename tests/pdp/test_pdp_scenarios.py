@@ -26,8 +26,9 @@ class TestPDPScenarios:
         yield # 테스트 함수 실행
 
         # 각 테스트 후 필요한 정리 작업이 있다면 여기에 추가
-        driver.delete_all_cookies() # 테스트 후 쿠키 삭제로 상태 초기화
-        print("브라우저 쿠키 삭제 완료.")
+        # PDP에서 빈번하게 쿠키를 삭제하는 것은 리소스 낭비, 주석처리
+        # driver.delete_all_cookies() # 테스트 후 쿠키 삭제로 상태 초기화
+        # print("브라우저 쿠키 삭제 완료.")
         
     def test_product_name_and_price_display(self):
         """
