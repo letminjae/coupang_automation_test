@@ -5,18 +5,36 @@ from dotenv import load_dotenv, find_dotenv
 import os
 
 class Config:
-  BASE_URL = "https://www.coupang.com"
-  IMPLICIT_WAIT_TIME = 5 # driver.implicitly_wait()에 사용
-  EXPLICIT_WAIT_TIME = 10 # WebDriverWait에 사용
+    BASE_URL = "https://www.coupang.com"
+    IMPLICIT_WAIT_TIME = 5 # driver.implicitly_wait()에 사용
+    EXPLICIT_WAIT_TIME = 10 # WebDriverWait에 사용
 
-  # User Agent 데이터 관련
-  USER_AGENTS = [
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.117 Safari/537.36"
-  ]
+    # User Agent 데이터 관련
+    USER_AGENTS = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.117 Safari/537.36",
 
-  def __init__(self):
+        # Chrome - Windows (최신 버전)
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0", # Edge (Chromium 기반)
+        
+        # Chrome - macOS (최신 버전)
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15", # Safari (macOS)
+        
+        # Chrome - Linux
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+            
+        # Mobile User-Agents (Android Chrome)
+        "Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36",
+        "Mozilla/5.0 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36",
+        
+        # Tablet User-Agents (iPad Safari)
+        "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    ]
+
+    def __init__(self):
         # 1. Jenkins 환경 변수를 먼저 가져오기
         self.COUPANG_ID = os.environ.get("COUPANG_ID")
         self.COUPANG_PW = os.environ.get("COUPANG_PW")
