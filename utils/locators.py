@@ -29,6 +29,7 @@ class MainPageLocators:
     SEARCH_INPUT = (By.CSS_SELECTOR, "input[name='q']") # 검색창
     SEARCH_BUTTON = (By.CSS_SELECTOR, "form[id='wa-search-form'] button[title='검색']") # 검색버튼
     SEARCH_RESULT = (By.ID, "main-content") # 검색 결과 창 콘텐츠
+    ERROR_MAIN_CONTENT = (By.ID, "main-content") # 에러 발생 시 메인 콘텐츠 영역
     
 class ProductDetailPageLocators:
     PRODUCT_TITLE = (By.CSS_SELECTOR, ".product-title span") # 상품명
