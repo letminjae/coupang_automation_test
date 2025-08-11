@@ -91,24 +91,21 @@ class TestMainScenarios:
         print("페이지 최하단으로 스크롤 중...")
         self.main_page.scroll_to_bottom()
         
-        # 2. '공지사항' 링크 클릭
+        # 2. '공지사항' 링크 클릭 전, 현재 URL을 저장
+        original_url = self.main_page.driver.current_url
+        print(f"링크 클릭 전 URL: {original_url}")
+        
+        # 3. '공지사항' 링크 클릭
         self.main_page.click_footer_notice_link()
+        print(f'공지사항 링크 클릭 후 URL: {self.main_page.driver.current_url}')
         
-        # 3. 새로 열린 탭/창으로 전환 및 URL 검증
-        # 공지사항 링크는 보통 새 탭/창으로 열리므로, 윈도우 핸들 전환 필요
-        original_window_handle = self.main_page.switch_to_new_window()
-        
+        # 4. URL이 바뀌었는지 확인
         expected_url = "https://mc.coupang.com/ssr/desktop/contact/notice"
-        print(f"현재 URL: {self.main_page.driver.current_url}, 예상 URL: {expected_url}")
-        
         assert self.main_page.driver.current_url == expected_url, \
             f"공지사항 페이지로 이동 실패. 예상: {expected_url}, 실제: {self.main_page.driver.current_url}"
         print("공지사항 페이지로 이동 성공 확인")
 
-        # 테스트 완료 후 원래 탭으로 돌아가기
-        self.main_page.driver.close()
-        self.main_page.switch_to_original_window(original_window_handle)
-        print("공지사항 테스트 완료 및 메인 페이지로 복귀")
+        print("공지사항 테스트 완료")
         
     def test_top_button_functionality(self):
         """
