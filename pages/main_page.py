@@ -95,7 +95,7 @@ class MainPage(BasePage):
         """현재 페이지의 Y축 스크롤 위치를 반환"""
         return self.driver.execute_script("return window.scrollY")
 
-    def scroll_down_randomly(self, min_px=800, max_px=1200):
+    def scroll_down_randomly(self, min_px=1600, max_px=2000):
         """페이지를 랜덤한 픽셀만큼 아래로 스크롤"""
         scroll_amount = random.uniform(min_px, max_px)
         self.driver.execute_script(f"window.scrollTo(0, {scroll_amount})")
@@ -104,7 +104,7 @@ class MainPage(BasePage):
     def is_top_button_displayed(self):
         """Top 버튼이 화면에 표시되는지 확인"""
         # Top 버튼은 스크롤이 내려가야 나타나므로, element_to_be_clickable로 명시적 대기 필요
-        return self.is_element_clickable(MainPageLocators.TOP_BUTTON, timeout=5) # 짧게 대기
+        return self.is_element_clickable(MainPageLocators.TOP_BUTTON, timeout=8) # 짧게 대기
 
     def click_top_button(self):
         """Top 버튼을 클릭"""

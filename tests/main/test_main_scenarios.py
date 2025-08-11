@@ -118,7 +118,7 @@ class TestMainScenarios:
         print("\n--- [TC-MAIN-005] Top 버튼 동작 테스트 시작")
         
         # 1. 페이지를 랜덤하게 아래로 스크롤하여 Top 버튼 표시되게 하기
-        self.main_page.scroll_down_randomly(min_px=800, max_px=1200) # 랜덤 스크롤
+        self.main_page.scroll_down_randomly(min_px=1600, max_px=2000) # 랜덤 스크롤
         
         # 2. Top 버튼 표시 확인
         assert self.main_page.is_top_button_displayed(), "Top 버튼이 표시되지 않거나 클릭할 수 없습니다."
