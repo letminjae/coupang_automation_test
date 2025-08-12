@@ -7,7 +7,7 @@ import time
 import random
 from utils.config import Config
 from selenium.webdriver.remote.webelement import WebElement # WebElement 타입 임포트
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 
 class BasePage:
     def __init__(self, driver):
@@ -17,10 +17,27 @@ class BasePage:
         # 액션 체인 객체 초기화
         self.action = ActionChains(self.driver)
 
-    def go_to_url(self, url):
-        """주어진 URL로 이동"""
-        self.driver.get(url)
-        self.random_sleep() # 페이지 로딩 후 랜덤 딜레이
+    def go_to_url(self, url, max_retries=3):
+        """
+        주어진 URL로 이동하며, 일시적인 네트워크 오류 발생 시 재시도
+        """
+        for attempt in range(max_retries):
+            try:
+                self.driver.get(url)
+                self.wait.until(EC.url_to_be(url)) 
+                print(f"URL 이동 성공: {url} (시도 {attempt + 1}/{max_retries})")
+                self.random_sleep()
+                return # 성공 시 메서드 종료
+            except (WebDriverException, TimeoutException) as e:
+                print(f"URL 이동 실패 (시도 {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    print("잠시 후 재시도합니다...")
+                    # 재시도 전 랜덤한 시간 동안 대기
+                    time.sleep(random.uniform(5, 10))
+                else:
+                    print(f"최대 재시도 횟수({max_retries}) 초과. URL 이동 실패.")
+                    # 마지막 시도에서도 실패하면 예외를 다시 발생시켜 테스트 실패로 반환.
+                    raise
         
     def random_sleep(self, min_time=1, max_time=3):
         """랜덤 시간 동안 슬립"""

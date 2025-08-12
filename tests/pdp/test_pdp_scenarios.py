@@ -18,7 +18,7 @@ class TestPDPScenarios:
         
         # 테스트할 상품의 고유 URL (예: 아이폰 16 프로)
         # 동일한 상품에 대한 여러 테스트이므로, fixture에서 한 번만 URL을 설정
-        self.product_url = config.BASE_URL + "vp/products/8335434891" # 사용할 상품 URL
+        self.product_url = config.BASE_URL + "/vp/products/8641586809" # 사용할 상품 URL
         
         self.pdp_page.go_to_url(self.product_url)
         self.pdp_page.move_mouse_randomly() # 봇 감지 회피
