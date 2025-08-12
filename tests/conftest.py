@@ -20,10 +20,13 @@ def driver():
     ua = random.choice(Config.USER_AGENTS)
     chrome_options.add_argument(f"user-agent={ua}")
     
+    # Jenkins 환경의 언어 설정과 일치시키거나, 일반적인 브라우저 설정을 사용 - 봇처럼 안보이도록 설정
+    chrome_options.add_argument("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+    
     # Chrome 옵션 추가 - 자동화 감지 회피 및 성능 최적화
-    chrome_options.add_argument("--start-maximized")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
+    chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
