@@ -9,12 +9,15 @@ from webdriver_manager.chrome import ChromeDriverManager
 import random
 from utils.config import Config
 
-@pytest.fixture(scope="session") # 세션 범위(제일 큰 범위)로 설정하여 *모든 테스트*에서 동일한 드라이버 인스턴스를 사용
+# Fixture의 스코프를 'session'에서 'function'으로 변경
+# 이렇게 하면 각 테스트 함수가 실행될 때마다 새로운 브라우저가 생성되므로 봇 감지 회피에 더 효과적
+@pytest.fixture(scope="function")
 def driver():
     """
     Selenium WebDriver 인스턴스를 초기화하고 테스트 완료 후 종료합니다.
     제공된 스크립트의 Chrome 옵션 및 사용자 에이전트 설정을 포함합니다.
     """
+    print("\n--- 새로운 WebDriver 세션 시작 ---")
     chrome_options = Options()
     # 봇 감지 회피를 위한 사용자 에이전트 설정
     ua = random.choice(Config.USER_AGENTS)
@@ -36,11 +39,14 @@ def driver():
     chrome_options.add_argument('--proxy-server="direct://"') # 프록시 사용 안 함
     chrome_options.add_argument('--proxy-bypass-list=*')
     
+    # selenium-wire 옵션 추가 (SSL 검증 비활성화)
+    # wire_options = {'verify_ssl': False}
+    
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
     
     # Implicit Wait는 여기에서 한 번만 설정합니다.
-    driver.implicitly_wait(Config.IMPLICIT_WAIT_TIME) 
+    driver.implicitly_wait(Config.IMPLICIT_WAIT_TIME)
 
     yield driver # driver() 를 테스트 함수들에게 제공하고, 테스트 함수 실행이 다 끝난 후에 정리 작업을 수행합니다.
     # 모든 테스트가 완료된 후, 드라이버 종료를 수행합니다.

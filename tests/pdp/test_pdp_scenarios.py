@@ -18,7 +18,7 @@ class TestPDPScenarios:
         
         # 테스트할 상품의 고유 URL (예: 아이폰 16 프로)
         # 동일한 상품에 대한 여러 테스트이므로, fixture에서 한 번만 URL을 설정
-        self.product_url = config.BASE_URL + "/vp/products/8641586809" # 사용할 상품 URL
+        self.product_url = config.BASE_URL + "/vp/products/8335434891" # 사용할 상품 URL
         
         self.pdp_page.go_to_url(self.product_url)
         self.pdp_page.move_mouse_randomly() # 봇 감지 회피
@@ -29,6 +29,22 @@ class TestPDPScenarios:
         # PDP에서 빈번하게 쿠키를 삭제하는 것은 리소스 낭비, 주석처리
         # driver.delete_all_cookies() # 테스트 후 쿠키 삭제로 상태 초기화
         # print("브라우저 쿠키 삭제 완료.")
+        
+    # def test_pdp_page_access_and_bot_detection(self):
+    #     self.product_url = config.BASE_URL + "vp/products/8335434891"
+    #     self.pdp_page.go_to_url(self.product_url)
+        
+    #     # 서버의 응답을 확인
+    #     for request in self.pdp_page.driver.requests:
+    #         if "coupang.com" in request.url:
+    #             print(f"URL: {request.url}")
+                
+    #             # request.response가 None이 아닌지 먼저 확인
+    #             if request.response:
+    #                 print(f"Status Code: {request.response.status_code}")
+    #             else:
+    #                 # 응답을 받지 못한 경우, 문제 발생 가능성을 기록
+    #                 print("Status Code: No response received") 
         
     def test_product_name_and_price_display(self):
         """
