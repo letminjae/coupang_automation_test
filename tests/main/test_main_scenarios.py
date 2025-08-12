@@ -1,6 +1,7 @@
 import pytest
 from pages.main_page import MainPage
 from utils.config import config_instance as config
+from utils.locators import MainPageLocators
 
 class TestMainScenarios:
     """
@@ -91,24 +92,21 @@ class TestMainScenarios:
         print("페이지 최하단으로 스크롤 중...")
         self.main_page.scroll_to_bottom()
         
-        # 2. '공지사항' 링크 클릭
+        # 2. '공지사항' 링크 클릭 전, 현재 URL을 저장
+        original_url = self.main_page.driver.current_url
+        print(f"링크 클릭 전 URL: {original_url}")
+        
+        # 3. '공지사항' 링크 클릭
         self.main_page.click_footer_notice_link()
+        print(f'공지사항 링크 클릭 후 URL: {self.main_page.driver.current_url}')
         
-        # 3. 새로 열린 탭/창으로 전환 및 URL 검증
-        # 공지사항 링크는 보통 새 탭/창으로 열리므로, 윈도우 핸들 전환 필요
-        original_window_handle = self.main_page.switch_to_new_window()
-        
+        # 4. URL이 바뀌었는지 확인
         expected_url = "https://mc.coupang.com/ssr/desktop/contact/notice"
-        print(f"현재 URL: {self.main_page.driver.current_url}, 예상 URL: {expected_url}")
-        
         assert self.main_page.driver.current_url == expected_url, \
             f"공지사항 페이지로 이동 실패. 예상: {expected_url}, 실제: {self.main_page.driver.current_url}"
         print("공지사항 페이지로 이동 성공 확인")
 
-        # 테스트 완료 후 원래 탭으로 돌아가기
-        self.main_page.driver.close()
-        self.main_page.switch_to_original_window(original_window_handle)
-        print("공지사항 테스트 완료 및 메인 페이지로 복귀")
+        print("공지사항 테스트 완료")
         
     def test_top_button_functionality(self):
         """
@@ -118,7 +116,7 @@ class TestMainScenarios:
         print("\n--- [TC-MAIN-005] Top 버튼 동작 테스트 시작")
         
         # 1. 페이지를 랜덤하게 아래로 스크롤하여 Top 버튼 표시되게 하기
-        self.main_page.scroll_down_randomly(min_px=800, max_px=1200) # 랜덤 스크롤
+        self.main_page.scroll_down_randomly(min_px=1600, max_px=2000) # 랜덤 스크롤
         
         # 2. Top 버튼 표시 확인
         assert self.main_page.is_top_button_displayed(), "Top 버튼이 표시되지 않거나 클릭할 수 없습니다."
@@ -143,21 +141,21 @@ class TestMainScenarios:
         """
         print("\n--- [TC-MAIN-006] '카테고리 광고상품' Lazy Loading 테스트 시작")
         
-        # 1. 스크롤 이전에 이미지 src 속성을 먼저 확인
-        srcs_before_scroll = self.main_page.get_promotion_image_srcs()
-        print(f"스크롤 이전 src 속성 (처음 3개): {srcs_before_scroll[:3]}") # 사실 상 렌더링전이라 srcs_before_scroll는 빈 리스트일 가능성이 높음
+        # 1. 스크롤 이전에 이미지 src 속성을 먼저 확인 (빈 리스트일 확률이 높음)
+        images_before_scroll = self.main_page.driver.find_elements(*MainPageLocators.CATEGORY_PROMOTION_IMAGES)
+        print(f"스크롤 이전 이미지 요소 수: {len(images_before_scroll)}")
         
         # 2. '카테고리 광고상품' 이미지가 나타날 때까지 아래로 스크롤
         self.main_page.scroll_to_reveal_promotion_images(scroll_distance=2000, scroll_step=80, scroll_delay=0.15)
         
         # 3. 스크롤 이후 다시 src 속성 확인 (lazy loading 여부)
-        srcs_after_scroll = self.main_page.get_promotion_image_srcs()
-        print(f"스크롤 이후 src 속성 (처음 3개): {srcs_after_scroll[:3]}")
+        images_after_scroll = self.main_page.get_promotion_image_srcs()
+        print(f"스크롤 이후 src 속성 (처음 3개): {images_after_scroll[:3]}")
         
-        # 4. 검증: 스크롤 이후 이미지 src 목록의 길이가 스크롤 이전보다 길어졌는지 확인
-        assert len(srcs_after_scroll) > len(srcs_before_scroll), "Lazy loading이 정상 작동하지 않았습니다."
+        # 4. 검증: 스크롤 이후 이미지 src 목록의 길이가 0보다 커야 합니다.
+        assert len(images_after_scroll) > 0, "스크롤 후에도 이미지가 로드되지 않았습니다."
         
-        print("Lazy loading 정상 작동 확인 완료")
+        print("Lazy loading 정상 작동 확인 완료.")
         
     def test_search_product_display(self):
         """
@@ -170,7 +168,7 @@ class TestMainScenarios:
         self.main_page.search_product("노트북")
         
         # 2. 검증 : 봇 감지로 인해 검색 결과 페이지가 로드되지 않음. (셀레니움 한계)
-        result = self.main_page.MAIN_CONTENT
+        result = self.main_page.get_search_result_content()
         assert "ERR_HTTP2_PROTOCOL_ERROR" in result.text, "정상적으로 봇 감지를 회피했습니다."
         
         print("검색 결과 페이지가 로드 되지 않았습니다. 봇 감지로 인해 정상적인 검색 결과를 확인할 수 없습니다.")

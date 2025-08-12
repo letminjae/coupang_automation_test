@@ -7,6 +7,7 @@ import time
 import random
 from utils.config import Config
 from selenium.webdriver.remote.webelement import WebElement # WebElement 타입 임포트
+from selenium.common.exceptions import TimeoutException
 
 class BasePage:
     def __init__(self, driver):
@@ -167,14 +168,32 @@ class BasePage:
     
     def switch_to_new_window(self):
         """새로 열린 윈도우(탭)로 전환"""
-        self.wait.until(EC.number_of_windows_to_be(2)) # 새 창이 뜰 때까지 기다림
         original_window = self.driver.current_window_handle
-        for window_handle in self.driver.window_handles:
-            if window_handle != original_window:
-                self.driver.switch_to.window(window_handle)
+        
+        try:
+            # 원래 창 외에 다른 창이 열릴 때까지 대기
+            self.wait.until(EC.new_window_is_opened(self.driver.window_handles))
+        except TimeoutException:
+            print("새 창이 타임아웃 시간 내에 열리지 않았습니다.")
+            return original_window # 예외 발생 시 원래 창 핸들만 반환
+        
+        window_handles = self.driver.window_handles
+        
+        # 새로 열린 창의 핸들 찾기
+        new_window_handle = None
+        for handle in window_handles:
+            if handle != original_window:
+                new_window_handle = handle
                 break
-        self.random_sleep(1, 2) # 전환 후 대기
-        return original_window # 이전 윈도우 핸들을 반환하여 필요시 다시 전환 가능
+        
+        if new_window_handle:
+            self.driver.switch_to.window(new_window_handle)
+            self.random_sleep(1, 2) # 전환 후 대기
+            print(f"새 창({new_window_handle})으로 전환되었습니다.")
+            return original_window # 원래 창의 핸들을 반환
+        else:
+            print("새 창이 열렸지만 핸들을 찾을 수 없습니다.")
+            return original_window
     
     def switch_to_original_window(self, original_window_handle):
         """원래 윈도우(탭)로 다시 전환"""

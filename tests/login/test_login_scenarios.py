@@ -59,7 +59,7 @@ class TestLoginScenarios:
         
     # 잘못된 비밀번호, 잘못된 ID, 비밀번호 미입력 등 다양한 로그인 실패 시나리오를 테스트 (parametrize 사용)
     @pytest.mark.parametrize("email, password, expected_error_message", [
-        (config.COUPANG_ID, "wrong123456", "이메일 또는 비밀번호를 다시 확인하세요."), # TC-LOGIN-002: 잘못된 비밀번호
+        (config.COUPANG_ID, "wrong123456", "이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요."), # TC-LOGIN-002: 잘못된 비밀번호
         ("", config.COUPANG_PW, "아이디(이메일)를 입력해주세요."),  # TC-LOGIN-003: 이메일 미입력
         (config.COUPANG_ID, "", "비밀번호를 입력해주세요."),  # TC-LOGIN-004: 비밀번호 미입력
         ("zzzz.1234", config.COUPANG_PW, "아이디는 이메일 형식으로 입력해주세요."), # TC-LOGIN-005: 잘못된 이메일 형식
