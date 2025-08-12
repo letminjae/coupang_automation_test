@@ -31,6 +31,10 @@ def driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_argument("--log-level=3")
+    chrome_options.add_argument('--disable-gpu') # GPU 사용 중지
+    chrome_options.add_argument('--disable-extensions') # 브라우저 확장 프로그램 사용 중지
+    chrome_options.add_argument('--proxy-server="direct://"') # 프록시 사용 안 함
+    chrome_options.add_argument('--proxy-bypass-list=*')
     
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
