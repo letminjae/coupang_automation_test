@@ -17,12 +17,15 @@ class TestLoginScenarios:
         각 로그인 테스트가 시작되기 전에 메인 페이지로 이동 후 로그인 페이지로 진입합니다.
         """
         print("\n--- 로그인 테스트 Setup ---")
-        main_page = MainPage(driver)
-        main_page.go_to_url(config.BASE_URL) # 기본 URL로 이동
-        main_page.move_mouse_randomly() # 봇 감지 회피
+        self.main_page = MainPage(driver)
+        self.main_page.go_to_url(config.BASE_URL) # 기본 URL로 이동
+        self.main_page.move_mouse_randomly() # 봇 감지 회피
+        
+        # 모바일 페이지 출력 팝업 처리
+        self.main_page.handle_popups()
         
         # 메인 페이지에서 로그인 버튼 클릭하여 로그인 페이지로 진입
-        main_page.click_login_button()
+        self.main_page.click_login_button()
         
         # 로그인 페이지 객체 생성
         login_page_instance = LoginPage(driver)

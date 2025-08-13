@@ -19,6 +19,9 @@ class TestMainScenarios:
         self.main_page.go_to_url(config.BASE_URL)
         self.main_page.move_mouse_randomly() # 봇 감지 회피
         
+        # 모바일 페이지 출력 팝업 처리
+        self.main_page.handle_popups()
+        
         yield  # 테스트 함수 실행
         
         # 각 테스트 후 필요한 정리 작업이 있다면 여기에 추가

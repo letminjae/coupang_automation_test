@@ -22,6 +22,12 @@ class ProductDetailPage(BasePage):
         """
         return self.get_element_text(ProductDetailPageLocators.PRODUCT_PRICE)
     
+    def is_product_name_displayed(self):
+        """
+        상품명이 화면에 표시되는지 확인
+        """
+        return self.is_element_displayed(ProductDetailPageLocators.PRODUCT_TITLE)
+    
     def is_product_price_displayed(self):
         """
         상품 가격이 화면에 표시되는지 확인
@@ -52,16 +58,20 @@ class ProductDetailPage(BasePage):
         주어진 썸네일 요소에 마우스를 올리고,
         해당 썸네일의 원본 이미지 src를 반환
         """
+        # 현재 메인 이미지의 src를 저장
+        original_main_src = self.get_main_image_src()
+        
+        # 썸네일 요소 내의 img 태그를 찾아 src 속성 가져오기
         img_tag = thumbnail_element.find_element(By.TAG_NAME, "img")
         thumbnail_src = img_tag.get_attribute("src")
         
         # 메인 이미지 src와 비교할 수 있도록 썸네일 src의 사이즈를 조정
         processed_thumbnail_src = thumbnail_src.replace("48x48ex", "492x492ex") 
-
+        
         # 썸네일에 마우스를 호버링
-        self.actions.move_to_element(thumbnail_element).perform()
-        self.random_sleep(0.5, 1.0) # 호버 후 잠시 대기
-
+        self.action.move_to_element(thumbnail_element).perform()
+        self.random_sleep(3, 4) # 호버 후 잠시 대기
+        
         return processed_thumbnail_src
     
     def is_rocket_badge_displayed(self):
@@ -157,7 +167,7 @@ class ProductDetailPage(BasePage):
         self.human_like_click(picker_element) # BasePage의 human_like_click 사용
         
         first_option_li = self.wait.until(EC.visibility_of_element_located(ProductDetailPageLocators.OPTION_LIST_FIRST_CHILD))
-        selected_option_text = self.get_element_text(first_option_li) # 텍스트 미리 저장
+        selected_option_text = first_option_li.text # 텍스트 미리 저장
         
         self.human_like_click(first_option_li)
         return selected_option_text
