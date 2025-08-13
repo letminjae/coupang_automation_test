@@ -74,6 +74,13 @@ class BasePage:
             element.click()
         self.random_sleep(0.5, 1.5) # 클릭 후 짧은 슬립
         
+    def human_like_click(self, element: WebElement):
+        """
+        주어진 WebElement 객체를 인간처럼 클릭
+        """
+        self.action.move_to_element(element).pause(random.uniform(0.2, 0.6)).click().perform()
+        self.random_sleep(0.5, 1.5)
+        
     def human_like_hover(self, locator, human_like=True):
         """
         특정 로케이터의 웹 요소에 인간처럼 마우스 오버
