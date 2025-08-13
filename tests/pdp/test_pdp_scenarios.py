@@ -60,7 +60,6 @@ class TestPDPScenarios:
         
         # 1. 메인 이미지 표시되는지 확인
         assert self.pdp_page.is_main_image_displayed(), "메인 이미지가 화면에 표시되지 않습니다."
-        breakpoint()
         print("메인 이미지 정상 표시 확인")
 
         # 2. 썸네일 이미지에 마우스 오버 시 메인 이미지가 변경되는지 확인
@@ -73,10 +72,10 @@ class TestPDPScenarios:
             # 현재 메인 이미지의 src 가져오기
             current_main_src = self.pdp_page.get_main_image_src()
 
-            print(f"[{index+1}번] 썸네일 이미지 (사이즈 조정): {processed_thumbnail_src}")
+            print(f"[{index+1}번] 썸네일 이미지: {processed_thumbnail_src}")
             print(f"[{index+1}번] 메인 이미지: {current_main_src}")
 
-            assert processed_thumbnail_src in current_main_src, \
+            assert processed_thumbnail_src == current_main_src, \
                 f'메인 이미지와 썸네일 이미지가 일치하지 않습니다. 썸네일: {processed_thumbnail_src}, 메인: {current_main_src}'
 
         print("모든 썸네일 호버 시 메인 이미지로 정상 표시 확인 완료")
