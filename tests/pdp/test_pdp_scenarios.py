@@ -9,19 +9,22 @@ class TestPDPScenarios:
     """
     
     @pytest.fixture(autouse=True)
-    def setup_for_pdp_tests(self, driver):
+    def setup_for_pdp_tests(self, pdp_driver):
         """
         각 PDP 테스트가 시작되기 전에 상품 상세 페이지로 이동합니다.
         """
         print("\n--- PDP 페이지 테스트 Setup ---")
-        self.pdp_page = ProductDetailPage(driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
+        self.pdp_page = ProductDetailPage(pdp_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
         
         # 테스트할 상품의 고유 URL (예: 아이폰 16 프로)
         # 동일한 상품에 대한 여러 테스트이므로, fixture에서 한 번만 URL을 설정
-        self.product_url = config.BASE_URL + "/vp/products/8641586809" # 사용할 상품 URL
+        self.product_url = config.BASE_URL + "/vp/products/8335434891" # 사용할 상품 URL
         
         self.pdp_page.go_to_url(self.product_url)
         self.pdp_page.move_mouse_randomly() # 봇 감지 회피
+        
+        # 모바일 페이지 출력 팝업 처리
+        self.pdp_page.handle_popups()
         
         yield # 테스트 함수 실행
 
@@ -69,10 +72,10 @@ class TestPDPScenarios:
             # 현재 메인 이미지의 src 가져오기
             current_main_src = self.pdp_page.get_main_image_src()
 
-            print(f"[{index+1}번] 썸네일 이미지 (사이즈 조정): {processed_thumbnail_src}")
+            print(f"[{index+1}번] 썸네일 이미지: {processed_thumbnail_src}")
             print(f"[{index+1}번] 메인 이미지: {current_main_src}")
 
-            assert processed_thumbnail_src in current_main_src, \
+            assert processed_thumbnail_src == current_main_src, \
                 f'메인 이미지와 썸네일 이미지가 일치하지 않습니다. 썸네일: {processed_thumbnail_src}, 메인: {current_main_src}'
 
         print("모든 썸네일 호버 시 메인 이미지로 정상 표시 확인 완료")
