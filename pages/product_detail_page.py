@@ -167,7 +167,7 @@ class ProductDetailPage(BasePage):
         self.human_like_click(picker_element) # BasePage의 human_like_click 사용
         
         first_option_li = self.wait.until(EC.visibility_of_element_located(ProductDetailPageLocators.OPTION_LIST_FIRST_CHILD))
-        selected_option_text = self.get_element_text(first_option_li) # 텍스트 미리 저장
+        selected_option_text = first_option_li.text # 텍스트 미리 저장
         
         self.human_like_click(first_option_li)
         return selected_option_text
