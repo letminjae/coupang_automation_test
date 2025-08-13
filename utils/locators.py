@@ -35,7 +35,7 @@ class ProductDetailPageLocators:
     PRODUCT_TITLE = (By.CSS_SELECTOR, ".product-title span") # 상품명
     PRODUCT_PRICE = (By.CLASS_NAME, "price-amount") # 가격
     MAIN_PRODUCT_IMAGE = (By.CSS_SELECTOR, "img[alt='Product image']") # 메인 상품 이미지
-    THUMBNAIL_IMAGES = (By.CSS_SELECTOR, "ul.twc-w-\\[70px\\] li") # 썸네일 이미지 목록 (li 태그)
+    THUMBNAIL_IMAGES = (By.CSS_SELECTOR, "ul.twc-static li") # 썸네일 이미지 목록 (li 태그)
     ROCKET_BADGE = (By.CSS_SELECTOR, "div.price-badge img") # 로켓 배송 뱃지
     REVIEW_LINK = (By.XPATH, "//a[contains(text(), '상품평')]") # '상품평' 텍스트를 포함하는 링크
     REVIEW_HEADER = (By.CSS_SELECTOR, "div.review-header") # 리뷰 섹션의 헤더
@@ -45,3 +45,4 @@ class ProductDetailPageLocators:
 class CommonLocators:
     POPUP_CLOSE_BUTTON_1 = (By.CLASS_NAME, "close-banner-icon-button") # 1번 팝업 닫기 버튼
     POPUP_CLOSE_BUTTON_2 = (By.ID, "bottomSheetBudgeCloseButton") # 2번 팝업 닫기 버튼
+    POPUP_CLOSE_BUTTON_3 = (By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg' and @width='18' and @height='18' and @viewBox='0 0 20 20']/path") # 3번 팝업 닫기 버튼

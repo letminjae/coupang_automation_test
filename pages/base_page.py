@@ -238,3 +238,10 @@ class BasePage:
             print("팝업 2 닫기 성공")
         except TimeoutException:
             print("팝업 2 닫기 실패 또는 팝업이 나타나지 않음")
+            
+        # 3번 팝업 닫기
+        try:
+            WebDriverWait(self.driver, Config.IMPLICIT_WAIT_TIME).until(EC.presence_of_element_located(CommonLocators.POPUP_CLOSE_BUTTON_3)).click()
+            print("팝업 3 닫기 성공")
+        except TimeoutException:
+            print("팝업 3 닫기 실패 또는 팝업이 나타나지 않음")
