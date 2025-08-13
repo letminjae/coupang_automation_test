@@ -8,6 +8,7 @@ import random
 from utils.config import Config
 from selenium.webdriver.remote.webelement import WebElement # WebElement 타입 임포트
 from selenium.common.exceptions import TimeoutException, WebDriverException
+from utils.locators import CommonLocators
 
 class BasePage:
     def __init__(self, driver):
@@ -216,3 +217,24 @@ class BasePage:
         """원래 윈도우(탭)로 다시 전환"""
         self.driver.switch_to.window(original_window_handle)
         self.random_sleep(1, 2) # 전환 후 대기
+        
+    def handle_popups(self):
+        """
+        모바일 페이지에서 고정적으로 나타나는 팝업을 처리
+        2가지의 팝업 창을 닫기
+        """
+        print("팝업 처리 시작...")
+        
+        # 1번 팝업 닫기
+        try:
+            WebDriverWait(self.driver, Config.IMPLICIT_WAIT_TIME).until(EC.presence_of_element_located(CommonLocators.POPUP_CLOSE_BUTTON_1)).click()
+            print("팝업 1 닫기 성공")
+        except TimeoutException:
+            print("팝업 1 닫기 실패 또는 팝업이 나타나지 않음")
+        
+        # 2번 팝업 닫기
+        try:
+            WebDriverWait(self.driver, Config.IMPLICIT_WAIT_TIME).until(EC.presence_of_element_located(CommonLocators.POPUP_CLOSE_BUTTON_2)).click()
+            print("팝업 2 닫기 성공")
+        except TimeoutException:
+            print("팝업 2 닫기 실패 또는 팝업이 나타나지 않음")

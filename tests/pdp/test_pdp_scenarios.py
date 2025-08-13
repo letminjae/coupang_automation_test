@@ -9,12 +9,12 @@ class TestPDPScenarios:
     """
     
     @pytest.fixture(autouse=True)
-    def setup_for_pdp_tests(self, driver):
+    def setup_for_pdp_tests(self, pdp_driver):
         """
         각 PDP 테스트가 시작되기 전에 상품 상세 페이지로 이동합니다.
         """
         print("\n--- PDP 페이지 테스트 Setup ---")
-        self.pdp_page = ProductDetailPage(driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
+        self.pdp_page = ProductDetailPage(pdp_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
         
         # 테스트할 상품의 고유 URL (예: 아이폰 16 프로)
         # 동일한 상품에 대한 여러 테스트이므로, fixture에서 한 번만 URL을 설정
@@ -23,28 +23,15 @@ class TestPDPScenarios:
         self.pdp_page.go_to_url(self.product_url)
         self.pdp_page.move_mouse_randomly() # 봇 감지 회피
         
+        # 모바일 페이지 출력 팝업 처리
+        self.pdp_page.handle_popups()
+        
         yield # 테스트 함수 실행
 
         # 각 테스트 후 필요한 정리 작업이 있다면 여기에 추가
         # PDP에서 빈번하게 쿠키를 삭제하는 것은 리소스 낭비, 주석처리
         # driver.delete_all_cookies() # 테스트 후 쿠키 삭제로 상태 초기화
         # print("브라우저 쿠키 삭제 완료.")
-        
-    # def test_pdp_page_access_and_bot_detection(self):
-    #     self.product_url = config.BASE_URL + "vp/products/8335434891"
-    #     self.pdp_page.go_to_url(self.product_url)
-        
-    #     # 서버의 응답을 확인
-    #     for request in self.pdp_page.driver.requests:
-    #         if "coupang.com" in request.url:
-    #             print(f"URL: {request.url}")
-                
-    #             # request.response가 None이 아닌지 먼저 확인
-    #             if request.response:
-    #                 print(f"Status Code: {request.response.status_code}")
-    #             else:
-    #                 # 응답을 받지 못한 경우, 문제 발생 가능성을 기록
-    #                 print("Status Code: No response received") 
         
     def test_product_name_and_price_display(self):
         """
@@ -73,6 +60,7 @@ class TestPDPScenarios:
         
         # 1. 메인 이미지 표시되는지 확인
         assert self.pdp_page.is_main_image_displayed(), "메인 이미지가 화면에 표시되지 않습니다."
+        breakpoint()
         print("메인 이미지 정상 표시 확인")
 
         # 2. 썸네일 이미지에 마우스 오버 시 메인 이미지가 변경되는지 확인

@@ -41,3 +41,7 @@ class ProductDetailPageLocators:
     REVIEW_HEADER = (By.CSS_SELECTOR, "div.review-header") # 리뷰 섹션의 헤더
     OPTION_PICKER_SELECT = (By.CSS_SELECTOR, "div.option-picker-select") # 옵션 선택 드롭다운
     OPTION_LIST_FIRST_CHILD = (By.CSS_SELECTOR, "ul.custom-scrollbar > li:first-child") # 옵션 목록의 첫 번째 항목
+    
+class CommonLocators:
+    POPUP_CLOSE_BUTTON_1 = (By.CLASS_NAME, "close-banner-icon-button") # 1번 팝업 닫기 버튼
+    POPUP_CLOSE_BUTTON_2 = (By.ID, "bottomSheetBudgeCloseButton") # 2번 팝업 닫기 버튼

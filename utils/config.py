@@ -1,6 +1,5 @@
 # Webdriver 환경 설정 - 프로젝트 전체의 설정값, 상수, 환경 변수
 
-import random
 from dotenv import load_dotenv, find_dotenv
 import os
 
@@ -16,7 +15,6 @@ class Config:
         "Mozilla/5.0 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36",
         "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36",
         "Mozilla/5.0 (Linux; Android 13; Samsung SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 13; Tab S8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
     ]
 
     def __init__(self):
