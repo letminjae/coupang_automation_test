@@ -45,4 +45,4 @@ class ProductDetailPageLocators:
 class CommonLocators:
     POPUP_CLOSE_BUTTON_1 = (By.CLASS_NAME, "close-banner-icon-button") # 1번 팝업 닫기 버튼
     POPUP_CLOSE_BUTTON_2 = (By.ID, "bottomSheetBudgeCloseButton") # 2번 팝업 닫기 버튼
-    POPUP_CLOSE_BUTTON_3 = (By.XPATH, "//svg[@xmlns='http://www.w3.org/2000/svg' and @width='18' and @height='18' and @viewBox='0 0 20 20']/path") # 3번 팝업 닫기 버튼
+    POPUP_CLOSE_BUTTON_3 = (By.CSS_SELECTOR, "div.twc-mx-\\[10px\\] > svg") # 3번 팝업 닫기 버튼
