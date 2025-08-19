@@ -9,12 +9,12 @@ class TestPDPScenarios:
     """
     
     @pytest.fixture(autouse=True)
-    def setup_for_pdp_tests(self, pdp_driver):
+    def setup_for_pdp_tests(self, mobile_driver):
         """
         각 PDP 테스트가 시작되기 전에 상품 상세 페이지로 이동합니다.
         """
         print("\n--- PDP 페이지 테스트 Setup ---")
-        self.pdp_page = ProductDetailPage(pdp_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
+        self.pdp_page = ProductDetailPage(mobile_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
         
         # 테스트할 상품의 고유 URL (예: 아이폰 16 프로)
         # 동일한 상품에 대한 여러 테스트이므로, fixture에서 한 번만 URL을 설정

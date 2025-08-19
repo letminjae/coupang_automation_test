@@ -51,15 +51,14 @@ def driver():
     # 모든 테스트가 완료된 후, 드라이버 종료를 수행합니다.
     driver.quit()
     
-# 2. PDP 테스트를 위한 전용 드라이버 (function 스코프)
-# 봇 감지에 취약한 PDP 테스트는 이 드라이버를 사용
+# 2. 취약한 테스트를 위한 전용 드라이버 (function 스코프)
+# 봇 감지에 취약한 테스트는 이 드라이버를 사용
 @pytest.fixture(scope="function")
-def pdp_driver():
+def mobile_driver():
     """
-    PDP 테스트를 위한 Selenium WebDriver 인스턴스를 테스트마다 초기화하고 종료
-    각 PDP 테스트가 독립적으로 실행
+    취약한 테스트를 위한 Selenium WebDriver 인스턴스를 테스트마다 초기화하고 종료
     """
-    print("\n--- PDP 테스트용 웹드라이버 세션 시작 ---")
+    print("\n--- 모바일 테스트용 웹드라이버 세션 시작 ---")
     chrome_options = Options()
     
     # 랜덤한 모바일 User-Agent 설정
