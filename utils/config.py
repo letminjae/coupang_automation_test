@@ -4,7 +4,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 
 class Config:
-    BASE_URL = "https://www.coupang.com"
+    BASE_URL = "https://www.coupang.com/"
     IMPLICIT_WAIT_TIME = 5 # driver.implicitly_wait()에 사용
     EXPLICIT_WAIT_TIME = 10 # WebDriverWait에 사용
 
