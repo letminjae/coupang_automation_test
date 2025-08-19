@@ -20,11 +20,10 @@ def driver():
     print("\n--- 기본 웹드라이버 세션 시작 ---")
     chrome_options = Options()
     
-    # 모든 테스트가 공유할 안정적인 User-Agent로 고정
-    # 모바일 UA가 안정적이므로 아래 UA를 기본으로 사용
-    stable_ua = "Mozilla/5.0 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36"
-    chrome_options.add_argument(f"user-agent={stable_ua}")
-    print(f"기본 Driver 사용 UA: {stable_ua}")
+    # 로그인, 메인 테스트 전용 데스크톱 UA 설정
+    desktop_ua = random.choice(Config.DESKTOP_USER_AGENTS)
+    chrome_options.add_argument(f"user-agent={desktop_ua}")
+    print(f"기본 Driver 사용 UA: {desktop_ua}")
     
     # Jenkins 환경의 언어 설정과 일치시키거나, 일반적인 브라우저 설정을 사용 - 봇처럼 안보이도록 설정
     chrome_options.add_argument("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
@@ -64,7 +63,7 @@ def pdp_driver():
     chrome_options = Options()
     
     # 랜덤한 모바일 User-Agent 설정
-    user_agent = random.choice(Config.USER_AGENTS)
+    user_agent = random.choice(Config.MOBILE_USER_AGENTS)
     chrome_options.add_argument(f"user-agent={user_agent}")
     print(f"PDP Driver 사용 UA: {user_agent}")
     
