@@ -10,14 +10,16 @@ class TestMainScenarios:
     """
     
     @pytest.fixture(autouse=True)
-    def setup_for_main_tests(self, driver):
+    def setup_for_main_tests(self, mobile_driver):
         """
         각 메인 페이지 테스트가 시작되기 전에 메인 페이지로 이동합니다.
         """
         print("\n--- 메인 페이지 테스트 Setup ---")
-        self.main_page = MainPage(driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
+        self.main_page = MainPage(mobile_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
         self.main_page.go_to_url(config.BASE_URL)
         self.main_page.move_mouse_randomly() # 봇 감지 회피
+        
+        self.main_page.handle_popups() # 모바일 페이지 출력 팝업 처리
         
         yield  # 테스트 함수 실행
         
@@ -101,7 +103,7 @@ class TestMainScenarios:
         print(f'공지사항 링크 클릭 후 URL: {self.main_page.driver.current_url}')
         
         # 4. URL이 바뀌었는지 확인
-        expected_url = "https://mc.coupang.com/ssr/desktop/contact/notice"
+        expected_url = "https://mc.coupang.com/ssr/mobile/contact/notice"
         assert self.main_page.driver.current_url == expected_url, \
             f"공지사항 페이지로 이동 실패. 예상: {expected_url}, 실제: {self.main_page.driver.current_url}"
         print("공지사항 페이지로 이동 성공 확인")
@@ -166,9 +168,9 @@ class TestMainScenarios:
         
         # 1. 검색창에 텍스트를 입력 후, 검색 버튼 클릭 (예: "노트북")
         self.main_page.search_product("노트북")
+        search_result_url = self.main_page.get_current_url()
         
-        # 2. 검증 : 봇 감지로 인해 검색 결과 페이지가 로드되지 않음. (셀레니움 한계)
-        result = self.main_page.get_search_result_content()
-        assert "ERR_HTTP2_PROTOCOL_ERROR" in result.text, "정상적으로 봇 감지를 회피했습니다."
+        # 2. 검증 : 정상적으로 검색 결과 페이지 로드
+        assert search_result_url == "https://www.coupang.com/np/search?component=&q=%EB%85%B8%ED%8A%B8%EB%B6%81&channel=user", f'정상적으로 검색 URL을 로드하지 못했습니다. 실제 URL {search_result_url}'
         
-        print("검색 결과 페이지가 로드 되지 않았습니다. 봇 감지로 인해 정상적인 검색 결과를 확인할 수 없습니다.")
+        print("검색 결과 페이지 로드 확인 완료")

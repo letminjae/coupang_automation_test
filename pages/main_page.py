@@ -139,10 +139,3 @@ class MainPage(BasePage):
         self.random_sleep(1, 2)  # 입력 후 짧은 슬립
         # 검색 버튼 클릭
         self.click_element(MainPageLocators.SEARCH_BUTTON, human_like=human_like)
-        
-    def get_search_result_content(self):
-        """
-        검색 결과 페이지의 콘텐츠 영역을 반환
-        검색 시, 에러가 발생하면 에러 메시지 영역을 반환
-        """
-        return self.find_element(MainPageLocators.ERROR_MAIN_CONTENT)
