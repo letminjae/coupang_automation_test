@@ -21,9 +21,6 @@ class TestLoginScenarios:
         self.main_page.go_to_url(config.BASE_URL) # 기본 URL로 이동
         self.main_page.move_mouse_randomly() # 봇 감지 회피
         
-        # 모바일 페이지 출력 팝업 처리
-        self.main_page.handle_popups()
-        
         # 메인 페이지에서 로그인 버튼 클릭하여 로그인 페이지로 진입
         self.main_page.click_login_button()
         
