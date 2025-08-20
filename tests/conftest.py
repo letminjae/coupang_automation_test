@@ -20,11 +20,10 @@ def driver():
     print("\n--- 기본 웹드라이버 세션 시작 ---")
     chrome_options = Options()
     
-    # 모든 테스트가 공유할 안정적인 User-Agent로 고정
-    # 모바일 UA가 안정적이므로 아래 UA를 기본으로 사용
-    stable_ua = "Mozilla/5.0 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36"
-    chrome_options.add_argument(f"user-agent={stable_ua}")
-    print(f"기본 Driver 사용 UA: {stable_ua}")
+    # 로그인, 메인 테스트 전용 데스크톱 UA 설정
+    desktop_ua = random.choice(Config.DESKTOP_USER_AGENTS)
+    chrome_options.add_argument(f"user-agent={desktop_ua}")
+    print(f"기본 Driver 사용 UA: {desktop_ua}")
     
     # Jenkins 환경의 언어 설정과 일치시키거나, 일반적인 브라우저 설정을 사용 - 봇처럼 안보이도록 설정
     chrome_options.add_argument("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
@@ -52,19 +51,18 @@ def driver():
     # 모든 테스트가 완료된 후, 드라이버 종료를 수행합니다.
     driver.quit()
     
-# 2. PDP 테스트를 위한 전용 드라이버 (function 스코프)
-# 봇 감지에 취약한 PDP 테스트는 이 드라이버를 사용
+# 2. 취약한 테스트를 위한 전용 드라이버 (function 스코프)
+# 봇 감지에 취약한 테스트는 이 드라이버를 사용
 @pytest.fixture(scope="function")
-def pdp_driver():
+def mobile_driver():
     """
-    PDP 테스트를 위한 Selenium WebDriver 인스턴스를 테스트마다 초기화하고 종료
-    각 PDP 테스트가 독립적으로 실행
+    취약한 테스트를 위한 Selenium WebDriver 인스턴스를 테스트마다 초기화하고 종료
     """
-    print("\n--- PDP 테스트용 웹드라이버 세션 시작 ---")
+    print("\n--- 모바일 테스트용 웹드라이버 세션 시작 ---")
     chrome_options = Options()
     
     # 랜덤한 모바일 User-Agent 설정
-    user_agent = random.choice(Config.USER_AGENTS)
+    user_agent = random.choice(Config.MOBILE_USER_AGENTS)
     chrome_options.add_argument(f"user-agent={user_agent}")
     print(f"PDP Driver 사용 UA: {user_agent}")
     
