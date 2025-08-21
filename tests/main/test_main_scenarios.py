@@ -17,7 +17,7 @@ class TestMainScenarios:
         print("\n--- 메인 페이지 테스트 Setup ---")
         self.main_page = MainPage(mobile_driver) # 클래스 인스턴스 변수로 저장, 다른 테스트 함수에서 사용
         self.main_page.go_to_url(config.BASE_URL)
-        self.main_page.move_mouse_randomly() # 봇 감지 회피
+        # self.main_page.move_mouse_randomly() # 봇 감지 회피
         
         self.main_page.handle_popups() # 모바일 페이지 출력 팝업 처리
         
